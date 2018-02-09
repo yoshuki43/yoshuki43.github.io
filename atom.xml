@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-02-09T13:41:04+09:00</updated>
+  <updated>2018-02-09T13:55:57+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -12,5 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Kotoイメージで遊んでみた]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/02/09/1st-post/"/>
+    <updated>2018-02-09T13:42:34+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/02/09/1st-post</id>
+    <content type="html"><![CDATA[<p>テストテストテスト。</p>
+
+<p><a href="http://octopress.org/">Octpass</a>でブログをつってみた。</p>
+
+<h2>Kotoイメージで遊んでみた</h2>
+
+<ul>
+<li><a href="https://yoshuki43.github.io/koto/koto.html">回してみた</a></li>
+<li><a href="https://yoshuki43.github.io/koto/phy.html">落としてみた</a></li>
+</ul>
+
+
+<p>Javascript+WebGLな3D Engineの「<a href="https://threejs.org/">Three.js</a>」と物理エンジン「<a href="https://github.com/lo-th/Oimo.js/">oimo.js</a>」を使用しています。</p>
+]]></content>
+  </entry>
   
 </feed>
