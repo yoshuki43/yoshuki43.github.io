@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="js/three.min.js"></script>
+  <script src="js/OrbitControls.js"></script>
+</head>
+
+<script>
+
+// ページの読み込みを待つ
+window.addEventListener('load', init);
+
+function init() {
+    const canvas = document.querySelector('#myCanvas');
+
+    // レンダラーを作成
+    const renderer = new THREE.WebGLRenderer({
+        canvas: canvas
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // シーンを作成
+    const scene = new THREE.Scene();
+
+    // カメラを作成
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 5000 );
+    camera.position.set(0, 10, 40);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    // マウスで操作可能にする
+    controls = new THREE.OrbitControls( camera, canvas );
+    controls.target.set(0, 0, 0);
+    controls.update();
+
+    // コインの横側を作成(100分割のシリンダー)
+    var coin_sides_geo = new THREE.CylinderGeometry( 10.0, 10.0, 1.0, 100.0, 10.0, true );
+
+    // コインの表裏を作成(100分割のサークルをいちから作る)
+    var coin_cap_geo = new THREE.Geometry();
+    var r = 10.0;
+    for (var i=0; i<100; i++) {
+        var a = i * 1/100 * Math.PI * 2;
+        var z = Math.sin(a);
+        var x = Math.cos(a);
+        var a1 = (i+1) * 1/100 * Math.PI * 2;
+        var z1 = Math.sin(a1);
+        var x1 = Math.cos(a1);
+        coin_cap_geo.vertices.push(
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(x*r, 0, z*r),
+            new THREE.Vector3(x1*r, 0, z1*r)
+        );
+        coin_cap_geo.faceVertexUvs[0].push([
+            new THREE.Vector2(0.5, 0.5),
+            new THREE.Vector2(x/2+0.5, z/2+0.5),
+            new THREE.Vector2(x1/2+0.5, z1/2+0.5)
+        ]);
+        coin_cap_geo.faces.push(new THREE.Face3(i*3, i*3+1, i*3+2));
+    }
+    //coin_cap_geo.computeCentroids();
+    coin_cap_geo.computeFaceNormals();
+
+    // texture
+    texLoader = new THREE.TextureLoader();
+    var coin_sides_texture = texLoader.load("./img/side.png");
+    var coin_cap_texture_t = texLoader.load("./img/top.png?");
+    var coin_cap_texture_b = texLoader.load("./img/bottom.png?");
+    var coin_sides_texture_bump = texLoader.load("./img/side_bump.png?1");
+    var coin_cap_texture_t_bump = texLoader.load("./img/top_bump.png?");
+    var coin_cap_texture_b_bump = texLoader.load("./img/bottom_bump.png?");
+
+    var coin_sides_mat = new THREE.MeshStandardMaterial({map:coin_sides_texture, bumpMap:coin_sides_texture_bump, bumpScale: 0.3, metalness: 1});
+    var coin_cap_mat_t = new THREE.MeshStandardMaterial({map:coin_cap_texture_t, bumpMap:coin_cap_texture_t_bump, bumpScale: 0.7, metalness: 1});
+    var coin_cap_mat_b = new THREE.MeshStandardMaterial({map:coin_cap_texture_b, bumpMap:coin_cap_texture_b_bump, bumpScale: 0.7, metalness: 1});
+    var coin_sides = new THREE.Mesh( coin_sides_geo, coin_sides_mat );
+    var coin_cap_top = new THREE.Mesh( coin_cap_geo, coin_cap_mat_t );
+    var coin_cap_bottom = new THREE.Mesh( coin_cap_geo, coin_cap_mat_b );
+    coin_cap_top.position.y = 0.5;
+    coin_cap_bottom.position.y = -0.5;
+    coin_cap_top.rotation.x = Math.PI;
+    coin_cap_bottom.rotation.y = Math.PI;
+
+    coin_sides.castShadow = true;
+    coin_cap_top.castShadow = true;
+    coin_cap_bottom.castShadow = true;
+
+    // コインオブジェクト＝表＋サイド＋裏
+    var coin = new THREE.Object3D();
+    coin.add(coin_sides);
+    coin.add(coin_cap_top);
+    coin.add(coin_cap_bottom);
+    coin.rotation.x = Math.PI / 2;
+
+    // シーンにコインオブジェクトを追加
+    scene.add(coin);
+
+    //地面オブジェクト
+    var material = new THREE.MeshStandardMaterial({color: 0xddbeef});
+    var geometryGround = new THREE.PlaneBufferGeometry(100, 100, 32, 32 );
+    meshGround = new THREE.Mesh(geometryGround, material);
+    meshGround.receiveShadow = true;
+    meshGround.rotation.x = -Math.PI / 2;
+    meshGround.position.y = -10;
+    scene.add(meshGround);
+
+    //ライティング
+    var light = new THREE.DirectionalLight( 0xffffff, 3.0 );
+    light.position.set( -20, 20, 10 );
+    light.shadow.camera.near = 5;
+    light.shadow.camera.far = 500;
+    light.shadow.camera.top = 30;
+    light.shadow.camera.bottom = -30;
+    light.shadow.camera.left = 30;
+    light.shadow.camera.right = -30;
+    light.castShadow = true;
+    scene.add( light );
+
+    var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
+    light2.position.set( 20, 20, 10 );
+    light2.shadow.camera.near = 5;
+    light2.shadow.camera.far = 500;
+    light2.shadow.camera.top = 30;
+    light2.shadow.camera.bottom = -30;
+    light2.shadow.camera.left = 30;
+    light2.shadow.camera.right = -30;
+    light2.castShadow = true;
+    scene.add( light2 );
+
+    window.addEventListener( 'resize', onWindowResize, false );
+    tick();
+
+    // 毎フレーム時に実行されるループイベントです
+    function tick() {
+        coin.rotation.z -= 0.02;
+        renderer.render(scene, camera); // レンダリング
+
+        requestAnimationFrame(tick);
+    }
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+}
+
+</script>
+
+<body>
+  <canvas id="myCanvas"></canvas>
+</body>
+</html>
