@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-02-09T14:38:53+09:00</updated>
+  <updated>2018-02-09T14:49:16+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -14,16 +14,16 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Octpassインストール方法]]></title>
+    <title type="html"><![CDATA[Octopressインストール方法]]></title>
     <link href="http://yoshuki43.github.io/blog/2018/02/09/octpass/"/>
     <updated>2018-02-09T14:13:16+09:00</updated>
     <id>http://yoshuki43.github.io/blog/2018/02/09/octpass</id>
-    <content type="html"><![CDATA[<h2>Octpassとは</h2>
+    <content type="html"><![CDATA[<h2>Octopressとは</h2>
 
 <p>OctopressはJekyllを使ったブログ構築用フレームワーク。
 GitHub Pagesと連携できる。</p>
 
-<p>Octpass<br/>
+<p>Octopress<br/>
 <a href="http://octopress.org/">http://octopress.org/</a></p>
 
 <p>インストール<br/>
