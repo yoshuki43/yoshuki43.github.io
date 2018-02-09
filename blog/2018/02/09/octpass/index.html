@@ -135,7 +135,7 @@ GitHub Pagesと連携できる。</p>
 </span><span class='line'>git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build</span></code></pre></td></tr></table></div></figure>
 
 
-<p>以下の行を\~/.bash_profileに追記</p>
+<p>以下の行を「~/.bash_profile」に追記</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -169,7 +169,7 @@ GitHub Pagesと連携できる。</p>
 </span><span class='line'>sudo apt-get install -y nodejs</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>Octpassインストール</h3>
+<h3>Octopressインストール</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -209,18 +209,18 @@ GitHub Pagesと連携できる。</p>
 </span><span class='line'>$ rake deploy</span></code></pre></td></tr></table></div></figure>
 
 
-<p>「<a href="https://">https://</a><username>.github.io/」にアクセスしてみる。</p>
+<p>「<a href="https://&amp;lt;username&amp;gt;.github.io/%E3%80%8D%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%97%E3%81%A6%E3%81%BF%E3%82%8B%E3%80%82">https://&amp;lt;username&amp;gt;.github.io/%E3%80%8D%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%97%E3%81%A6%E3%81%BF%E3%82%8B%E3%80%82</a></p>
 
 <h3>設定</h3>
 
-<p>vi _config.yml</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vi _config.yml</span></code></pre></td></tr></table></div></figure>
+
 
 <p>ブログ以外のファイルも入れたい?<br/>
 -> sourceフォルダにGitHub Pagesにアップロードしたいファイルを入れる。</p>
 
 <h2>ブログを書く</h2>
-
-<p>ファイルが作成されるので、編集する。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -230,12 +230,14 @@ GitHub Pagesと連携できる。</p>
 </span><span class='line'>Creating new post: source/_posts/2018-02-09-1st-post.markdown</span></code></pre></td></tr></table></div></figure>
 
 
+<p>ファイルが作成されるので、編集する。</p>
+
 <p>マークダウンヘルプ<br/>
 <a href="https://github.com/higuma/markdown_cheat_sheet">https://github.com/higuma/markdown_cheat_sheet</a></p>
 
-<p>VSCodeを使用していれば、Ctrl+Shift+Vでプレビュー画面を表示できる。</p>
+<p>VSCodeを使用していれば、Ctrl+k vでプレビュー画面を表示できる。</p>
 
-<p>かけたら先ほどと同じようにgenerate->deployする。</p>
+<p>書き終わったら先ほどと同じようにgenerate->deployする。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
