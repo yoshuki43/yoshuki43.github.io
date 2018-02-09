@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-02-09T13:55:57+09:00</updated>
+  <updated>2018-02-09T14:20:52+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -14,13 +14,121 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Octpassインストール方法]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/02/09/octpass/"/>
+    <updated>2018-02-09T14:13:16+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/02/09/octpass</id>
+    <content type="html"><![CDATA[<h2>Octpassとは</h2>
+
+<p>OctopressはJekyllを使ったブログ構築用フレームワーク。
+GitHub Pagesと連携できる。</p>
+
+<p>Octpass<br/>
+<a href="http://octopress.org/">http://octopress.org/</a></p>
+
+<p>インストール<br/>
+<a href="http://octopress.org/docs/setup/">http://octopress.org/docs/setup/</a></p>
+
+<p>テーマ一覧<br/>
+<a href="https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes">https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes</a></p>
+
+<h2>インストール</h2>
+
+<h3>準備</h3>
+
+<p>ruby環境の構築</p>
+
+<p><code>sudo apt-get update</code>\
+<code>sudo apt-get install -y ruby ruby-dev git</code>\
+<code>git clone </code><a href="https://github.com/rbenv/rbenv.git"><code>https://github.com/rbenv/rbenv.git</code></a><code> ~/.rbenv</code>\
+<code>cd ~/.rbenv &amp;&amp; src/configure &amp;&amp; make -C src</code>\
+<code>git clone </code><a href="https://github.com/sstephenson/ruby-build.git"><code>https://github.com/sstephenson/ruby-build.git</code></a><code> ~/.rbenv/plugins/ruby-build</code></p>
+
+<p>以下の行を\~/.bash_profileに追記</p>
+
+<p><code>export PATH="$HOME/.rbenv/bin:$PATH"</code>\
+<code>eval "$(rbenv init -)"</code></p>
+
+<p>反映</p>
+
+<p><code>source ~/.bash_profile</code></p>
+
+<p>ruby環境を作成(バージョンは<a href="https://pages.github.com/versions/">ここ</a>のrubyと同じにするとよい。)</p>
+
+<p><code>rbenv install 2.4.2</code>\
+<code>rbenv global 2.4.2</code>\
+<code>gem install bundler</code>\
+<code>#rakeは特定バージョンが必要なのでインストールしないこと！rake</code></p>
+
+<p>node.jsをインストール(ExecJSで必要になるため。)</p>
+
+<p><code>curl -sL </code><a href="https://deb.nodesource.com/setup_9.x"><code>https://deb.nodesource.com/setup_9.x</code></a><code> | sudo -E bash -</code>\
+<code>sudo apt-get install -y nodejs</code></p>
+
+<h3>Octpassインストール</h3>
+
+<p><code>git clone </code><a href="git://github.com/imathis/octopress.git"><code>git://github.com/imathis/octopress.git</code></a><code> octopress</code>\
+<code>cd octopress</code>\
+<code>rbenv rehash</code>\
+<code>bundle install</code>\
+<code>rake install</code></p>
+
+<h3>テーマ変更</h3>
+
+<p>このへんからよさげなテーマを選ぶ。</p>
+
+<p><a href="https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes">https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes</a></p>
+
+<p>GitHubをDeploy先として登録</p>
+
+<p>「ユーザ名.github.io」というリポジトリをGitHubに作っておく。</p>
+
+<p><code>$ rake setup_github_pages</code>\
+<code>   :</code>\
+<code>Repository url: </code><a href="https://github.com/"><code>https://github.com/</code></a><username><code>/</code><username><code>.github.io</code>\
+<code>   :</code>\
+<code>rake generate</code>\
+<code>rake deploy</code></p>
+
+<p>「<a href="https://">https://</a><username>.github.io/」にアクセスしてみる。</p>
+
+<h3>設定</h3>
+
+<p>vi _config.yml</p>
+
+<p>ブログ以外のファイルも入れたい?<br/>
+-> sourceフォルダにGitHub Pagesにアップロードしたいファイルを入れる。</p>
+
+<h3>ブログを書く</h3>
+
+<p>ファイルが作成されるので、編集する。</p>
+
+<p><code>$ rake new_post['1st post']</code>\
+<code>mkdir -p source/_posts</code>\
+<code>Creating new post: source/_posts/2018-02-09-1st-post.markdown</code></p>
+
+<p>マークダウンヘルプ<br/>
+<a href="https://github.com/higuma/markdown_cheat_sheet">https://github.com/higuma/markdown_cheat_sheet</a></p>
+
+<p>VSCodeを使用していれば、Ctrl+Shift+Vでプレビュー画面を表示できる。</p>
+
+<p>かけたら先ほどと同じようにgenerate->deployする。</p>
+
+<p><code>rake generate</code>\
+<code>rake deploy</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Kotoイメージで遊んでみた]]></title>
     <link href="http://yoshuki43.github.io/blog/2018/02/09/1st-post/"/>
     <updated>2018-02-09T13:42:34+09:00</updated>
     <id>http://yoshuki43.github.io/blog/2018/02/09/1st-post</id>
     <content type="html"><![CDATA[<p>テストテストテスト。</p>
 
-<p><a href="http://octopress.org/">Octpass</a>でブログをつってみた。</p>
+<p>このブログは<a href="http://octopress.org/">Octpass</a>を使用して作成しています。</p>
+
+<p>以下はテスト記事。</p>
 
 <h2>Kotoイメージで遊んでみた</h2>
 
