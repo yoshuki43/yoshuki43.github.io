@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-02-09T14:20:52+09:00</updated>
+  <updated>2018-02-09T14:30:53+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -38,40 +38,65 @@ GitHub Pagesと連携できる。</p>
 
 <p>ruby環境の構築</p>
 
-<p><code>sudo apt-get update</code>\
-<code>sudo apt-get install -y ruby ruby-dev git</code>\
-<code>git clone </code><a href="https://github.com/rbenv/rbenv.git"><code>https://github.com/rbenv/rbenv.git</code></a><code> ~/.rbenv</code>\
-<code>cd ~/.rbenv &amp;&amp; src/configure &amp;&amp; make -C src</code>\
-<code>git clone </code><a href="https://github.com/sstephenson/ruby-build.git"><code>https://github.com/sstephenson/ruby-build.git</code></a><code> ~/.rbenv/plugins/ruby-build</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get update
+</span><span class='line'>sudo apt-get install -y ruby ruby-dev git
+</span><span class='line'>git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+</span><span class='line'>cd ~/.rbenv && src/configure && make -C src
+</span><span class='line'>git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build</span></code></pre></td></tr></table></div></figure>
+
 
 <p>以下の行を\~/.bash_profileに追記</p>
 
-<p><code>export PATH="$HOME/.rbenv/bin:$PATH"</code>\
-<code>eval "$(rbenv init -)"</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export PATH="$HOME/.rbenv/bin:$PATH"
+</span><span class='line'>eval "$(rbenv init -)"</span></code></pre></td></tr></table></div></figure>
+
 
 <p>反映</p>
 
-<p><code>source ~/.bash_profile</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source ~/.bash_profile</span></code></pre></td></tr></table></div></figure>
+
 
 <p>ruby環境を作成(バージョンは<a href="https://pages.github.com/versions/">ここ</a>のrubyと同じにするとよい。)</p>
 
-<p><code>rbenv install 2.4.2</code>\
-<code>rbenv global 2.4.2</code>\
-<code>gem install bundler</code>\
-<code>#rakeは特定バージョンが必要なのでインストールしないこと！rake</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> rbenv install 2.4.2
+</span><span class='line'> rbenv global 2.4.2
+</span><span class='line'> gem install bundler
+</span><span class='line'> #rakeは特定バージョンが必要なのでインストールしないこと！rake</span></code></pre></td></tr></table></div></figure>
+
 
 <p>node.jsをインストール(ExecJSで必要になるため。)</p>
 
-<p><code>curl -sL </code><a href="https://deb.nodesource.com/setup_9.x"><code>https://deb.nodesource.com/setup_9.x</code></a><code> | sudo -E bash -</code>\
-<code>sudo apt-get install -y nodejs</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+</span><span class='line'>sudo apt-get install -y nodejs</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>Octpassインストール</h3>
 
-<p><code>git clone </code><a href="git://github.com/imathis/octopress.git"><code>git://github.com/imathis/octopress.git</code></a><code> octopress</code>\
-<code>cd octopress</code>\
-<code>rbenv rehash</code>\
-<code>bundle install</code>\
-<code>rake install</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git octopress
+</span><span class='line'>cd octopress
+</span><span class='line'>rbenv rehash
+</span><span class='line'>bundle install
+</span><span class='line'>rake install</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>テーマ変更</h3>
 
@@ -81,14 +106,23 @@ GitHub Pagesと連携できる。</p>
 
 <p>GitHubをDeploy先として登録</p>
 
-<p>「ユーザ名.github.io」というリポジトリをGitHubに作っておく。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>「ユーザ名.github.io」というリポジトリをGitHubに作っておく。
+</span><span class='line'>
+</span><span class='line'>$ rake setup_github_pages
+</span><span class='line'>    :
+</span><span class='line'>Repository url: https://github.com/&lt;username&gt;/&lt;username&gt;.github.io
+</span><span class='line'>    :
+</span><span class='line'>$ rake generate
+</span><span class='line'>$ rake deploy</span></code></pre></td></tr></table></div></figure>
 
-<p><code>$ rake setup_github_pages</code>\
-<code>   :</code>\
-<code>Repository url: </code><a href="https://github.com/"><code>https://github.com/</code></a><username><code>/</code><username><code>.github.io</code>\
-<code>   :</code>\
-<code>rake generate</code>\
-<code>rake deploy</code></p>
 
 <p>「<a href="https://">https://</a><username>.github.io/」にアクセスしてみる。</p>
 
@@ -99,13 +133,17 @@ GitHub Pagesと連携できる。</p>
 <p>ブログ以外のファイルも入れたい?<br/>
 -> sourceフォルダにGitHub Pagesにアップロードしたいファイルを入れる。</p>
 
-<h3>ブログを書く</h3>
+<h2>ブログを書く</h2>
 
 <p>ファイルが作成されるので、編集する。</p>
 
-<p><code>$ rake new_post['1st post']</code>\
-<code>mkdir -p source/_posts</code>\
-<code>Creating new post: source/_posts/2018-02-09-1st-post.markdown</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rake new_post['1st post']
+</span><span class='line'>mkdir -p source/_posts
+</span><span class='line'>Creating new post: source/_posts/2018-02-09-1st-post.markdown</span></code></pre></td></tr></table></div></figure>
+
 
 <p>マークダウンヘルプ<br/>
 <a href="https://github.com/higuma/markdown_cheat_sheet">https://github.com/higuma/markdown_cheat_sheet</a></p>
@@ -114,8 +152,11 @@ GitHub Pagesと連携できる。</p>
 
 <p>かけたら先ほどと同じようにgenerate->deployする。</p>
 
-<p><code>rake generate</code>\
-<code>rake deploy</code></p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake generate
+</span><span class='line'>rake deploy</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   
