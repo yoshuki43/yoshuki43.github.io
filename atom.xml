@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-02-09T18:35:58+09:00</updated>
+  <updated>2018-02-09T18:37:37+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -124,7 +124,7 @@ GitHub Pagesと連携できる。</p>
 </span><span class='line'>$ rake deploy</span></code></pre></td></tr></table></div></figure>
 
 
-<p>「<a href="https://&amp;lt;username&amp;gt;.github.io/%E3%80%8D%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%97%E3%81%A6%E3%81%BF%E3%82%8B%E3%80%82">https://&amp;lt;username&amp;gt;.github.io/%E3%80%8D%E3%81%AB%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E3%81%97%E3%81%A6%E3%81%BF%E3%82%8B%E3%80%82</a></p>
+<p>「<a href="">https://&lt;username&gt;.github.io/</a>」にアクセスしてみる。</p>
 
 <h3>設定</h3>
 
