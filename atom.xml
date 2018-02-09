@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-02-09T14:49:16+09:00</updated>
+  <updated>2018-02-09T14:50:03+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -167,7 +167,7 @@ GitHub Pagesと連携できる。</p>
     <id>http://yoshuki43.github.io/blog/2018/02/09/1st-post</id>
     <content type="html"><![CDATA[<p>テストテストテスト。</p>
 
-<p>このブログは<a href="http://octopress.org/">Octpass</a>を使用して作成しています。</p>
+<p>このブログは<a href="http://octopress.org/">Octopress</a>を使用して作成しています。</p>
 
 <p>以下はテスト記事。</p>
 
