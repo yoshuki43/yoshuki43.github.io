@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-03-17T12:59:08+09:00</updated>
+  <updated>2018-03-17T13:00:27+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -25,9 +25,13 @@ KotoのソースにはTestnet用のdnsseedとして「dnsseed.testnet.koto.cash�
 
 <p>ということで、プライベートなTestnetを立てる方法を探ってみました。</p>
 
-<p>ポイントは二つ：
-- Genesis Block(最初のブロック)に定義されている日時からある程度時間が経つとマイニングできなく(ブロックダウンロード待ちに)なってしまうので、それをどうにかする。
-- 最低2個のkotodがネットワークに参加していないとマイニングできない。</p>
+<p>ポイントは二つ：</p>
+
+<ul>
+<li>Genesis Block(最初のブロック)に定義されている日時からある程度時間が経つとマイニングできなく(ブロックダウンロード待ちに)なってしまうので、それをどうにかする。</li>
+<li>最低2個のkotodがネットワークに参加していないとマイニングできない。</li>
+</ul>
+
 
 <p><strong>(自分で建てるのがめんどくさい人向け)</strong></p>
 
