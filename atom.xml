@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-03-17T13:00:27+09:00</updated>
+  <updated>2018-03-17T13:10:54+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -148,13 +148,13 @@ make kotod</p></blockquote>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">rpcuser</span><span class="o">=</span><span class="n">rpcuser</span>
-</span><span class='line'><span class="n">rpcpassword</span><span class="o">=</span><span class="n">rpcpass</span>
-</span><span class='line'><span class="n">rpcbind</span><span class="o">=</span><span class="mf">0.0.0.0</span>
-</span><span class='line'><span class="n">rpcallowip</span><span class="o">=</span><span class="mf">0.0.0.0</span><span class="o">/</span><span class="mi">0</span>
-</span><span class='line'><span class="n">server</span><span class="o">=</span><span class="mi">1</span>
-</span><span class='line'><span class="n">minetolocalwallet</span><span class="o">=</span><span class="mi">1</span>
-</span><span class='line'><span class="n">testnet</span><span class="o">=</span><span class="mi">1</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="na">rpcuser</span><span class="o">=</span><span class="s">rpcuser</span>
+</span><span class='line'><span class="na">rpcpassword</span><span class="o">=</span><span class="s">rpcpass</span>
+</span><span class='line'><span class="na">rpcbind</span><span class="o">=</span><span class="s">0.0.0.0</span>
+</span><span class='line'><span class="na">rpcallowip</span><span class="o">=</span><span class="s">0.0.0.0/0</span>
+</span><span class='line'><span class="na">server</span><span class="o">=</span><span class="s">1</span>
+</span><span class='line'><span class="na">minetolocalwallet</span><span class="o">=</span><span class="s">1</span>
+</span><span class='line'><span class="na">testnet</span><span class="o">=</span><span class="s">1</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -170,16 +170,16 @@ make kotod</p></blockquote>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">rpcuser</span><span class="o">=</span><span class="n">rpcuser</span>
-</span><span class='line'><span class="n">rpcpassword</span><span class="o">=</span><span class="n">rpcpass</span>
-</span><span class='line'><span class="n">rpcbind</span><span class="o">=</span><span class="mf">0.0.0.0</span>
-</span><span class='line'><span class="n">rpcallowip</span><span class="o">=</span><span class="mf">0.0.0.0</span><span class="o">/</span><span class="mi">0</span>
-</span><span class='line'><span class="n">port</span><span class="o">=</span><span class="mi">18443</span>
-</span><span class='line'><span class="n">rpcport</span><span class="o">=</span><span class="mi">18442</span>
-</span><span class='line'><span class="n">connect</span><span class="o">=</span><span class="n">localhost</span>
-</span><span class='line'><span class="n">server</span><span class="o">=</span><span class="mi">1</span>
-</span><span class='line'><span class="n">minetolocalwallet</span><span class="o">=</span><span class="mi">1</span>
-</span><span class='line'><span class="n">datadir</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">kotos</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="na">rpcuser</span><span class="o">=</span><span class="s">rpcuser</span>
+</span><span class='line'><span class="na">rpcpassword</span><span class="o">=</span><span class="s">rpcpass</span>
+</span><span class='line'><span class="na">rpcbind</span><span class="o">=</span><span class="s">0.0.0.0</span>
+</span><span class='line'><span class="na">rpcallowip</span><span class="o">=</span><span class="s">0.0.0.0/0</span>
+</span><span class='line'><span class="na">port</span><span class="o">=</span><span class="s">18443</span>
+</span><span class='line'><span class="na">rpcport</span><span class="o">=</span><span class="s">18442</span>
+</span><span class='line'><span class="na">connect</span><span class="o">=</span><span class="s">localhost</span>
+</span><span class='line'><span class="na">server</span><span class="o">=</span><span class="s">1</span>
+</span><span class='line'><span class="na">minetolocalwallet</span><span class="o">=</span><span class="s">1</span>
+</span><span class='line'><span class="na">datadir</span><span class="o">=</span><span class="s">/home/koto/.kotos</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -206,21 +206,21 @@ make kotod</p></blockquote>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
-</span><span class='line'><span class="n">Description</span><span class="o">=</span><span class="n">Bitcoin</span> <span class="n">daemon</span>
-</span><span class='line'><span class="n">After</span><span class="o">=</span><span class="n">network</span><span class="p">.</span><span class="n">target</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[Unit]</span>
+</span><span class='line'><span class="na">Description</span><span class="o">=</span><span class="s">Bitcoin daemon</span>
+</span><span class='line'><span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
 </span><span class='line'>
-</span><span class='line'><span class="p">[</span><span class="n">Service</span><span class="p">]</span>
-</span><span class='line'><span class="n">ExecStart</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">kotod</span> <span class="o">-</span><span class="n">testnet</span> <span class="o">-</span><span class="n">daemon</span> <span class="o">-</span><span class="n">conf</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">koto</span><span class="o">/</span><span class="n">koto</span><span class="p">.</span><span class="n">conf</span> <span class="o">-</span><span class="n">pid</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">koto</span><span class="o">/</span><span class="n">koto</span><span class="o">-</span><span class="n">testnet</span><span class="p">.</span><span class="n">pid</span>
-</span><span class='line'><span class="n">User</span><span class="o">=</span><span class="n">koto</span>
-</span><span class='line'><span class="n">Group</span><span class="o">=</span><span class="n">koto</span>
-</span><span class='line'><span class="n">Type</span><span class="o">=</span><span class="n">forking</span>
-</span><span class='line'><span class="n">PIDFile</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">koto</span><span class="o">/</span><span class="n">koto</span><span class="o">-</span><span class="n">testnet</span><span class="p">.</span><span class="n">pid</span>
-</span><span class='line'><span class="n">Restart</span><span class="o">=</span><span class="n">on</span><span class="o">-</span><span class="n">failure</span>
-</span><span class='line'><span class="n">PrivateTmp</span><span class="o">=</span><span class="nb">true</span>
+</span><span class='line'><span class="k">[Service]</span>
+</span><span class='line'><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/bin/kotod -testnet -daemon -conf=/home/koto/.koto/koto.conf -pid=/home/koto/.koto/koto-testnet.pid</span>
+</span><span class='line'><span class="na">User</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Group</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Type</span><span class="o">=</span><span class="s">forking</span>
+</span><span class='line'><span class="na">PIDFile</span><span class="o">=</span><span class="s">/home/koto/.koto/koto-testnet.pid</span>
+</span><span class='line'><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+</span><span class='line'><span class="na">PrivateTmp</span><span class="o">=</span><span class="s">true</span>
 </span><span class='line'>
-</span><span class='line'><span class="p">[</span><span class="n">Install</span><span class="p">]</span>
-</span><span class='line'><span class="n">WantedBy</span><span class="o">=</span><span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="p">.</span><span class="n">target</span>
+</span><span class='line'><span class="k">[Install]</span>
+</span><span class='line'><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -241,21 +241,21 @@ make kotod</p></blockquote>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
-</span><span class='line'><span class="n">Description</span><span class="o">=</span><span class="n">Koto</span> <span class="n">cash</span> <span class="n">daemon</span> <span class="p">(</span><span class="n">testnet</span><span class="o">/</span><span class="n">slave</span><span class="p">)</span>
-</span><span class='line'><span class="n">After</span><span class="o">=</span><span class="n">network</span><span class="p">.</span><span class="n">target</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[Unit]</span>
+</span><span class='line'><span class="na">Description</span><span class="o">=</span><span class="s">Koto cash daemon (testnet/slave)</span>
+</span><span class='line'><span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
 </span><span class='line'>
-</span><span class='line'><span class="p">[</span><span class="n">Service</span><span class="p">]</span>
-</span><span class='line'><span class="n">ExecStart</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">kotod</span> <span class="o">-</span><span class="n">testnet</span> <span class="o">-</span><span class="n">daemon</span> <span class="o">-</span><span class="n">conf</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">kotos</span><span class="o">/</span><span class="n">koto</span><span class="p">.</span><span class="n">conf</span> <span class="o">-</span><span class="n">pid</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">kotos</span><span class="o">/</span><span class="n">koto</span><span class="o">-</span><span class="n">testnet</span><span class="p">.</span><span class="n">pid</span>
-</span><span class='line'><span class="n">User</span><span class="o">=</span><span class="n">koto</span>
-</span><span class='line'><span class="n">Group</span><span class="o">=</span><span class="n">koto</span>
-</span><span class='line'><span class="n">Type</span><span class="o">=</span><span class="n">forking</span>
-</span><span class='line'><span class="n">PIDFile</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">kotos</span><span class="o">/</span><span class="n">koto</span><span class="o">-</span><span class="n">testnet</span><span class="p">.</span><span class="n">pid</span>
-</span><span class='line'><span class="n">Restart</span><span class="o">=</span><span class="n">on</span><span class="o">-</span><span class="n">failure</span>
-</span><span class='line'><span class="n">PrivateTmp</span><span class="o">=</span><span class="nb">true</span>
+</span><span class='line'><span class="k">[Service]</span>
+</span><span class='line'><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/bin/kotod -testnet -daemon -conf=/home/koto/.kotos/koto.conf -pid=/home/koto/.kotos/koto-testnet.pid</span>
+</span><span class='line'><span class="na">User</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Group</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Type</span><span class="o">=</span><span class="s">forking</span>
+</span><span class='line'><span class="na">PIDFile</span><span class="o">=</span><span class="s">/home/koto/.kotos/koto-testnet.pid</span>
+</span><span class='line'><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+</span><span class='line'><span class="na">PrivateTmp</span><span class="o">=</span><span class="s">true</span>
 </span><span class='line'>
-</span><span class='line'><span class="p">[</span><span class="n">Install</span><span class="p">]</span>
-</span><span class='line'><span class="n">WantedBy</span><span class="o">=</span><span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="p">.</span><span class="n">target</span>
+</span><span class='line'><span class="k">[Install]</span>
+</span><span class='line'><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
