@@ -9,10 +9,8 @@
   <meta name="author" content="yoshuki43">
 
   
-  <meta name="description" content="Octopressとは OctopressはJekyllを使ったブログ構築用フレームワーク。
-GitHub Pagesと連携できる。 Octopress
-http://octopress.org/ インストール
-http://octopress.org/docs/setup/ テーマ一覧 &hellip;">
+  <meta name="description" content="はじめに 2018年3月現在、KotoにはTestnetが存在しません。
+KotoのソースにはTestnet用のdnsseedとして「dnsseed.testnet.koto.cash」が設定されていますが、DNS問い合わせしても値が返ってきません。 ということで、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +79,306 @@ http://octopress.org/docs/setup/ テーマ一覧 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2018/03/17/create-koto-testnet-locally/">ローカルにKotoのTestnetを作成してみる</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-03-17T11:08:30+09:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>11:08 am</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>はじめに</h2>
+
+<p>2018年3月現在、KotoにはTestnetが存在しません。
+KotoのソースにはTestnet用のdnsseedとして「dnsseed.testnet.koto.cash」が設定されていますが、DNS問い合わせしても値が返ってきません。</p>
+
+<p>ということで、プライベートなTestnetを立てる方法を探ってみました。</p>
+
+<p>ポイントは二つ：
+- Genesis Block(最初のブロック)に定義されている日時からある程度時間が経つとマイニングできなく(ブロックダウンロード待ちに)なってしまうので、それをどうにかする。
+- 最低2個のkotodがネットワークに参加していないとマイニングできない。</p>
+
+<p><strong>(自分で建てるのがめんどくさい人向け)</strong></p>
+
+<p>下記手順を行ったtestnetを<code>koto-testnet.poolof.work</code>で公開しています。
+上記ホストをaddnodeすれば接続できるので、自由に使ってください。<br/>
+※ただし予告なくサービス停止するかもしれません。</p>
+
+<p>使い方：</p>
+
+<p>(1) <code>-testnet</code>オプションをつけてkotodを起動する。</p>
+
+<blockquote><p>kotod -testnet &hellip;</p></blockquote>
+
+<p>(2) <code>koto-testnet.poolof.work</code>をaddnodeする。</p>
+
+<blockquote><p>koto-cli &ndash;testnet addnode koto-testnet.poolof.work add</p></blockquote>
+
+<h2>Kotodを改造する</h2>
+
+<h3>日時対策</h3>
+
+<p>単純にOSの時間を2017/12/10 13:10:55(Genesis Blockのタイムスタンプ)付近に変えてもいいが、ここでは日時(等)のチェックをしているところをつぶしてしまうことで実現します。</p>
+
+<p>チェック関数は<code>main.cpp</code>の<code>IsInitialBlockDownload()</code>なので、その先頭に<code>return false;</code>を入れてあげます。</p>
+
+<p>main.cpp:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="kt">bool</span> <span class="nf">IsInitialBlockDownload</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>                               <span class="c1">// &lt;=この行を挿入</span>
+</span><span class='line'>    <span class="k">const</span> <span class="n">CChainParams</span><span class="o">&amp;</span> <span class="n">chainParams</span> <span class="o">=</span> <span class="n">Params</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">LOCK</span><span class="p">(</span><span class="n">cs_main</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">fImporting</span> <span class="o">||</span> <span class="n">fReindex</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>dnsseed設定を変更</h3>
+
+<p>公式にTestnetが動き出したときにプライベートTestnetが影響を与えてしまわないように、公式のdnsseed設定を消しておきます。
+ついでに自サーバのホスト名(または、IPアドレス)をdnsseedとして設定しておきます。</p>
+
+<p>chainparam.cpp:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Testnet (v3)</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">CTestNetParams</span> <span class="o">:</span> <span class="k">public</span> <span class="n">CMainParams</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>    <span class="n">CTestNetParams</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="o">:</span>
+</span><span class='line'>        <span class="n">vFixedSeeds</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span><span class='line'>        <span class="n">vSeeds</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span><span class='line'>        <span class="c1">//vSeeds.push_back(CDNSSeedData(&quot;koto.cash&quot;, &quot;dnsseed.testnet.koto.cash&quot;)); // &lt;= 消す</span>
+</span><span class='line'>        <span class="n">vSeeds</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">CDNSSeedData</span><span class="p">(</span><span class="s">&quot;koto.cash&quot;</span><span class="p">,</span> <span class="s">&quot;koto-testnet.poolof.work&quot;</span><span class="p">));</span>    <span class="c1">// &lt;= 追加</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>コンパイル</h3>
+
+<p>既にビルド済みの場合は、srcディレクトリでmake kotodを実行します。</p>
+
+<blockquote><p>cd koto<br/>
+cd src<br/>
+make kotod</p></blockquote>
+
+<p>まだビルドしていない場合は、普通にビルドします。</p>
+
+<blockquote><p>./zcutil/build.sh &ndash;disable-rust</p></blockquote>
+
+<p>ビルドし終わったら/usr/local/binへコピーします。(自分の環境では。)</p>
+
+<blockquote><p>sudo cp kotod /usr/local/bin</p></blockquote>
+
+<h2>Kotodをポートを変えて2個実行する</h2>
+
+<h3>設定</h3>
+
+<p>1個目はデフォルトのテストネット設定を使用。
+- ~/.koto
+- ポートは18433(p2p)と18432(rpc)</p>
+
+<p>2個目のKotod：
+- ~/.kotosを使う
+- ポートは18443(p2p)と18442(rpc)
+- 2個目のKotodが1個目に接続する。</p>
+
+<p>設定ファイルは以下のようにしています。</p>
+
+<p>1個目：~/.koto/koto.conf</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">rpcuser</span><span class="o">=</span><span class="n">rpcuser</span>
+</span><span class='line'><span class="n">rpcpassword</span><span class="o">=</span><span class="n">rpcpass</span>
+</span><span class='line'><span class="n">rpcbind</span><span class="o">=</span><span class="mf">0.0.0.0</span>
+</span><span class='line'><span class="n">rpcallowip</span><span class="o">=</span><span class="mf">0.0.0.0</span><span class="o">/</span><span class="mi">0</span>
+</span><span class='line'><span class="n">server</span><span class="o">=</span><span class="mi">1</span>
+</span><span class='line'><span class="n">minetolocalwallet</span><span class="o">=</span><span class="mi">1</span>
+</span><span class='line'><span class="n">testnet</span><span class="o">=</span><span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2個目：~/.kotos/koto.conf</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">rpcuser</span><span class="o">=</span><span class="n">rpcuser</span>
+</span><span class='line'><span class="n">rpcpassword</span><span class="o">=</span><span class="n">rpcpass</span>
+</span><span class='line'><span class="n">rpcbind</span><span class="o">=</span><span class="mf">0.0.0.0</span>
+</span><span class='line'><span class="n">rpcallowip</span><span class="o">=</span><span class="mf">0.0.0.0</span><span class="o">/</span><span class="mi">0</span>
+</span><span class='line'><span class="n">port</span><span class="o">=</span><span class="mi">18443</span>
+</span><span class='line'><span class="n">rpcport</span><span class="o">=</span><span class="mi">18442</span>
+</span><span class='line'><span class="n">connect</span><span class="o">=</span><span class="n">localhost</span>
+</span><span class='line'><span class="n">server</span><span class="o">=</span><span class="mi">1</span>
+</span><span class='line'><span class="n">minetolocalwallet</span><span class="o">=</span><span class="mi">1</span>
+</span><span class='line'><span class="n">datadir</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">kotos</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>port, rpcport, connect, datadirをそれぞれ設定しています。</p>
+
+<h3>systemd設定</h3>
+
+<p>ユーザ「koto」で実行する前提です。上記の設定ファイルもその前提で作成しています。</p>
+
+<p>/etc/systemd/system/kotod-testnet.service:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
+</span><span class='line'><span class="n">Description</span><span class="o">=</span><span class="n">Bitcoin</span> <span class="n">daemon</span>
+</span><span class='line'><span class="n">After</span><span class="o">=</span><span class="n">network</span><span class="p">.</span><span class="n">target</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">Service</span><span class="p">]</span>
+</span><span class='line'><span class="n">ExecStart</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">kotod</span> <span class="o">-</span><span class="n">testnet</span> <span class="o">-</span><span class="n">daemon</span> <span class="o">-</span><span class="n">conf</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">koto</span><span class="o">/</span><span class="n">koto</span><span class="p">.</span><span class="n">conf</span> <span class="o">-</span><span class="n">pid</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">koto</span><span class="o">/</span><span class="n">koto</span><span class="o">-</span><span class="n">testnet</span><span class="p">.</span><span class="n">pid</span>
+</span><span class='line'><span class="n">User</span><span class="o">=</span><span class="n">koto</span>
+</span><span class='line'><span class="n">Group</span><span class="o">=</span><span class="n">koto</span>
+</span><span class='line'><span class="n">Type</span><span class="o">=</span><span class="n">forking</span>
+</span><span class='line'><span class="n">PIDFile</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">koto</span><span class="o">/</span><span class="n">koto</span><span class="o">-</span><span class="n">testnet</span><span class="p">.</span><span class="n">pid</span>
+</span><span class='line'><span class="n">Restart</span><span class="o">=</span><span class="n">on</span><span class="o">-</span><span class="n">failure</span>
+</span><span class='line'><span class="n">PrivateTmp</span><span class="o">=</span><span class="nb">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">Install</span><span class="p">]</span>
+</span><span class='line'><span class="n">WantedBy</span><span class="o">=</span><span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="p">.</span><span class="n">target</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>/etc/systemd/system/kotod-testnet-slave.service:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
+</span><span class='line'><span class="n">Description</span><span class="o">=</span><span class="n">Koto</span> <span class="n">cash</span> <span class="n">daemon</span> <span class="p">(</span><span class="n">testnet</span><span class="o">/</span><span class="n">slave</span><span class="p">)</span>
+</span><span class='line'><span class="n">After</span><span class="o">=</span><span class="n">network</span><span class="p">.</span><span class="n">target</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">Service</span><span class="p">]</span>
+</span><span class='line'><span class="n">ExecStart</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">kotod</span> <span class="o">-</span><span class="n">testnet</span> <span class="o">-</span><span class="n">daemon</span> <span class="o">-</span><span class="n">conf</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">kotos</span><span class="o">/</span><span class="n">koto</span><span class="p">.</span><span class="n">conf</span> <span class="o">-</span><span class="n">pid</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">kotos</span><span class="o">/</span><span class="n">koto</span><span class="o">-</span><span class="n">testnet</span><span class="p">.</span><span class="n">pid</span>
+</span><span class='line'><span class="n">User</span><span class="o">=</span><span class="n">koto</span>
+</span><span class='line'><span class="n">Group</span><span class="o">=</span><span class="n">koto</span>
+</span><span class='line'><span class="n">Type</span><span class="o">=</span><span class="n">forking</span>
+</span><span class='line'><span class="n">PIDFile</span><span class="o">=/</span><span class="n">home</span><span class="o">/</span><span class="n">koto</span><span class="o">/</span><span class="p">.</span><span class="n">kotos</span><span class="o">/</span><span class="n">koto</span><span class="o">-</span><span class="n">testnet</span><span class="p">.</span><span class="n">pid</span>
+</span><span class='line'><span class="n">Restart</span><span class="o">=</span><span class="n">on</span><span class="o">-</span><span class="n">failure</span>
+</span><span class='line'><span class="n">PrivateTmp</span><span class="o">=</span><span class="nb">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">Install</span><span class="p">]</span>
+</span><span class='line'><span class="n">WantedBy</span><span class="o">=</span><span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="p">.</span><span class="n">target</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>実行</h3>
+
+<p>実行します。</p>
+
+<blockquote><p>sudo systemctl daemon-reload<br/>
+sudo systemctl start kotod-testnet<br/>
+sudo systemctl start kotod-testnet-slave</p></blockquote>
+
+<p><code>koto-cli --testnet getinfo</code>を実行してconnectionsが1になっていれば成功しているはずです。</p>
+
+<h2>マイニングしてみる</h2>
+
+<p>cpuminer-yescryptをコンパイルしましょう。</p>
+
+<blockquote><p> minerd &ndash;algo=yescrypt &ndash;userpass=rpcuser:rpcpass -o 127.0.0.1:18432</p></blockquote>
+
+<p>これで猛烈な勢いでマイニングが進むはず。</p>
+
+<h2>その後の作業</h2>
+
+<h3>日時対策を元に戻す</h3>
+
+<p>1度マイニングしてしまえば日時対策は不要です。</p>
+
+<p><code>main.cpp</code>の修正の影響がどこまであるかわからないので、<code>main.cpp</code>を元に戻したkotodを再コンパイルし、サービスを再起動します。</p>
+
+<h3>ToDo</h3>
+
+<ul>
+<li>testnet用のinsightを立てる</li>
+<li>testnet用の蛇口(Fauset)を作る</li>
+<li>dnsseed(DNSサーバ)を立てる</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -234,9 +532,13 @@ GitHub Pagesと連携できる。</p>
 <p>ファイルが作成されるので、編集する。</p>
 
 <p>マークダウンヘルプ<br/>
-<a href="https://github.com/higuma/markdown_cheat_sheet">https://github.com/higuma/markdown_cheat_sheet</a></p>
+<a href="https://github.com/higuma/markdown_cheat_sheet">https://github.com/higuma/markdown_cheat_sheet</a>
+<a href="https://help.github.com/articles/basic-writing-and-formatting-syntax">https://help.github.com/articles/basic-writing-and-formatting-syntax</a></p>
 
-<p>VSCodeを使用していれば、Ctrl+k vでプレビュー画面を表示できる。</p>
+<p>VSCodeを使用していれば、マークダウンを開いた画面の右上にある「プレビューを横に表示」ボタンでプレビュー画面を表示できる。（Ctrk+K vでもOK?)</p>
+
+<p>追記:<br/>
+VSCodeの拡張機能「Markdown Preview Github Styling」をインストールすれば、よりGitHubに近い形でプレビューを表示できる。</p>
 
 <p>書き終わったら先ほどと同じようにgenerate->deployする。</p>
 
