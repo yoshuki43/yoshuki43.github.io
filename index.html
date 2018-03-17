@@ -9,8 +9,24 @@
   <meta name="author" content="yoshuki43">
 
   
-  <meta name="description" content="はじめに 2018年3月現在、KotoにはTestnetが存在しません。
-KotoのソースにはTestnet用のdnsseedとして「dnsseed.testnet.koto.cash」が設定されていますが、DNS問い合わせしても値が返ってきません。 ということで、 &hellip;">
+  <meta name="description" content="準備 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+#kotodコンパイルに必要なもの
+sudo apt-get install
+sudo apt-get install build-essential pkg-config libc6-dev m4 g++- &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +95,254 @@ KotoのソースにはTestnet用のdnsseedとして「dnsseed.testnet.koto.cash�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2018/03/17/install-insight/">Testnet用にKotoのInsightをインストールする</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-03-17T13:59:43+09:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2018</span></span> <span class='time'>1:59 pm</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>準備</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#kotodコンパイルに必要なもの
+</span><span class='line'>sudo apt-get install
+</span><span class='line'>sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib \
+</span><span class='line'>    autoconf libtool ncurses-dev unzip git python python-zmq zlib1g-dev \
+</span><span class='line'>    wget bsdmainutils automake curl
+</span><span class='line'>
+</span><span class='line'>#Node.js一式
+</span><span class='line'>curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+</span><span class='line'>sudo apt-get install -y nodejs
+</span><span class='line'>
+</span><span class='line'>#ソースダウンロード
+</span><span class='line'>git clone https://github.com/wo01/koto
+</span><span class='line'>git clone https://github.com/wo01/bitcore-node-koto
+</span><span class='line'>git clone https://github.com/wo01/insight-api-koto
+</span><span class='line'>git clone https://github.com/wo01/insight-ui-koto</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>インストール</h2>
+
+<h3>Insight用のKotodをコンパイル</h3>
+
+<p>insightではgetblockhashes等、通常のKotodでサポートしていない(削除された？)RPCコマンドを使用するため、特別なバージョンのKotodが必要です。</p>
+
+<p>上記リポジトリのブランチにinsight用のKotodが入っています。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd koto
+</span><span class='line'>git checkout v1.0.14-bitcore
+</span><span class='line'>./zcutil/build.sh --disable-rust
+</span><span class='line'>cp src/kotod ../bitcore-node-koto/bin/</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>bitcore-node-kotoの準備</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd ../bitcore-node-koto
+</span><span class='line'>npm install</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>ノード作成とUIプラグインのインストール</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd ..
+</span><span class='line'>./bitcore-node-koto/bin/bitcore-node create testnet
+</span><span class='line'>cd testnet
+</span><span class='line'>../bitcore-node-koto/bin/bitcore-node install ../insight-api-koto
+</span><span class='line'>../bitcore-node-koto/bin/bitcore-node install ../insight-ui-koto</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>設定</h3>
+
+<p>networkをtestnetにします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;testnet&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;port&quot;</span><span class="p">:</span> <span class="mi">3001</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;services&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;bitcoind&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;insight-api-koto&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;insight-ui-koto&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;web&quot;</span>
+</span><span class='line'>  <span class="p">],</span>
+</span><span class='line'>  <span class="nt">&quot;servicesConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;bitcoind&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nt">&quot;spawn&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nt">&quot;datadir&quot;</span><span class="p">:</span> <span class="s2">&quot;./data&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;exec&quot;</span><span class="p">:</span> <span class="s2">&quot;/home/koto/bitcore-node-koto/bin/kotod&quot;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>とりあえず実行してみる</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="err">../bitcore-node-koto/bin/bitcore-node</span> <span class="err">start</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下のことを確認する。</p>
+
+<ul>
+<li>Blocksが増えていく</li>
+<li><a href="http://localhost:3001/">http://localhost:3001/</a> にアクセスできる</li>
+</ul>
+
+
+<p>Ctrl-Cで終了</p>
+
+<h3>kotod設定</h3>
+
+<p>初期設定のままだとbitcore-node(insight)のログと一緒にkotodの出力が表示さててしまい、非常にうざいので、kotodの表示を止めます。</p>
+
+<p>vi data/koto.conf</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="err">#これを最後の行に追加</span>
+</span><span class='line'><span class="err">showmetrics=</span><span class="mi">0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>systemdで起動</h2>
+
+<p>前提</p>
+
+<ul>
+<li>kotoユーザで実行</li>
+<li>ホームディレクトリ直下に、上記手順でインストールした</li>
+</ul>
+
+
+<p>/etc/systemd/system/insight.conf</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[Unit]</span>
+</span><span class='line'><span class="na">Description</span> <span class="o">=</span> <span class="s">Koto Blockchain Explorer</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">[Service]</span>
+</span><span class='line'><span class="na">ExecStart</span> <span class="o">=</span> <span class="s">/home/koto/bitcore-node-koto/bin/bitcore-node start</span>
+</span><span class='line'><span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/home/koto/testnet</span>
+</span><span class='line'><span class="na">Restart</span> <span class="o">=</span> <span class="s">always</span>
+</span><span class='line'><span class="na">Type</span> <span class="o">=</span> <span class="s">simple</span>
+</span><span class='line'><span class="na">User</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Group</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">[Install]</span>
+</span><span class='line'><span class="na">WantedBy</span> <span class="o">=</span> <span class="s">multi-user.target</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>実行</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="err">sudo</span> <span class="err">systemctl</span> <span class="err">daemon-reload</span>
+</span><span class='line'><span class="err">sudo</span> <span class="err">systemctl</span> <span class="err">enable</span> <span class="err">insight</span>
+</span><span class='line'><span class="err">sudo</span> <span class="err">systemctl</span> <span class="err">start</span> <span class="err">insight</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>確認</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>systemctl status insight
+</span><span class='line'>● insight.service - Koto Blockchain Explorer
+</span><span class='line'>   Loaded: loaded <span class="o">(</span>/etc/systemd/system/insight.service<span class="p">;</span> disabled<span class="o">)</span>
+</span><span class='line'>   Active: active <span class="o">(</span>running<span class="o">)</span> since Sat 2018-03-17 13:56:29 JST<span class="p">;</span> 28min ago
+</span><span class='line'> Main PID: <span class="m">13350</span> <span class="o">(</span>bitcore<span class="o">)</span>
+</span><span class='line'>   CGroup: /system.slice/insight.service
+</span><span class='line'>           ├─13350 bitcore
+</span><span class='line'>           └─13361 /home/koto/bitcore-node-koto/bin/kotod --conf<span class="o">=</span>/home/koto/testnet/data/koto.conf --datadir<span class="o">=</span>/home/koto/...
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -187,7 +451,7 @@ KotoのソースにはTestnet用のdnsseedとして「dnsseed.testnet.koto.cash�
 </span><span class='line'>            <span class="o">:</span>
 </span><span class='line'>        <span class="n">vFixedSeeds</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
 </span><span class='line'>        <span class="n">vSeeds</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-</span><span class='line'>        <span class="c1">//vSeeds.push_back(CDNSSeedData(&quot;koto.cash&quot;, &quot;dnsseed.testnet.koto.cash&quot;)); // &lt;= 消す</span>
+</span><span class='line'>        <span class="c1">//vSeeds.push_back(CDNSSeedData(&quot;koto.cash&quot;, &quot;dnsseed.testnet.koto.cash&quot;));                // &lt;= 消す</span>
 </span><span class='line'>        <span class="n">vSeeds</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">CDNSSeedData</span><span class="p">(</span><span class="s">&quot;koto-testnet.poolof.work&quot;</span><span class="p">,</span> <span class="s">&quot;koto-testnet.poolof.work&quot;</span><span class="p">));</span>    <span class="c1">// &lt;= 追加</span>
 </span></code></pre></td></tr></table></div></figure>
 
