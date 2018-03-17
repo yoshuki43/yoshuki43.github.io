@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-03-17T13:10:54+09:00</updated>
+  <updated>2018-03-17T13:12:16+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -128,14 +128,22 @@ make kotod</p></blockquote>
 
 <h3>設定</h3>
 
-<p>1個目はデフォルトのテストネット設定を使用。
-- ~/.koto
-- ポートは18433(p2p)と18432(rpc)</p>
+<p>1個目はデフォルトのテストネット設定を使用。</p>
 
-<p>2個目のKotod：
-- ~/.kotosを使う
-- ポートは18443(p2p)と18442(rpc)
-- 2個目のKotodが1個目に接続する。</p>
+<ul>
+<li>~/.koto</li>
+<li>ポートは18433(p2p)と18432(rpc)</li>
+</ul>
+
+
+<p>2個目のKotod：</p>
+
+<ul>
+<li>~/.kotosを使う</li>
+<li>ポートは18443(p2p)と18442(rpc)</li>
+<li>2個目のKotodが1個目に接続する。</li>
+</ul>
+
 
 <p>設定ファイルは以下のようにしています。</p>
 
