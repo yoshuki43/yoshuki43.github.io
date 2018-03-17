@@ -25,7 +25,7 @@
 14
 15
 #kotodコンパイルに必要なもの
-sudo apt-get install
+sudo apt-get update
 sudo apt-get install build-essential pkg-config libc6-dev m4 g++- &hellip;">
   
 
@@ -135,7 +135,7 @@ sudo apt-get install build-essential pkg-config libc6-dev m4 g++- &hellip;">
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>#kotodコンパイルに必要なもの
-</span><span class='line'>sudo apt-get install
+</span><span class='line'>sudo apt-get update
 </span><span class='line'>sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib \
 </span><span class='line'>    autoconf libtool ncurses-dev unzip git python python-zmq zlib1g-dev \
 </span><span class='line'>    wget bsdmainutils automake curl
@@ -158,6 +158,18 @@ sudo apt-get install build-essential pkg-config libc6-dev m4 g++- &hellip;">
 <p>insightではgetblockhashes等、通常のKotodでサポートしていない(削除された？)RPCコマンドを使用するため、特別なバージョンのKotodが必要です。</p>
 
 <p>上記リポジトリのブランチにinsight用のKotodが入っています。</p>
+
+<p>非公式Testnetを使う場合は、ここでdnsseedの設定を変更しておきましょう。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vi koto/src/chainparam.cpp
+</span><span class='line'> ...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>※詳細は<a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">前回の記事</a>を参照のこと。</p>
+
+<p>コンパイル手順：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
