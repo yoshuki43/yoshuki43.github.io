@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-03-17T18:00:26+09:00</updated>
+  <updated>2018-03-19T13:46:45+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -35,11 +35,11 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#kotodコンパイルに必要なもの
+</pre></td><td class='code'><pre><code class=''><span class='line'>#kotod/bitcore-nodeコンパイルに必要なもの
 </span><span class='line'>sudo apt-get update
 </span><span class='line'>sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib \
 </span><span class='line'>    autoconf libtool ncurses-dev unzip git python python-zmq zlib1g-dev \
-</span><span class='line'>    wget bsdmainutils automake curl
+</span><span class='line'>    wget bsdmainutils automake curl libzmq3-dev
 </span><span class='line'>
 </span><span class='line'>#Node.js一式
 </span><span class='line'>curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
@@ -81,6 +81,8 @@
 </span><span class='line'>./zcutil/build.sh --disable-rust
 </span><span class='line'>cp src/kotod ../bitcore-node-koto/bin/</span></code></pre></td></tr></table></div></figure>
 
+
+<p>※「~/.zcash-params」の準備も忘れずに。</p>
 
 <h3>bitcore-node-kotoの準備</h3>
 
