@@ -351,6 +351,46 @@ sudo apt-get install build-essential pkg-config libc6-dev &hellip;">
 </span><span class='line'>           └─13361 /home/koto/bitcore-node-koto/bin/kotod --conf<span class="o">=</span>/home/koto/testnet/data/koto.conf --datadir<span class="o">=</span>/home/koto/...
 </span></code></pre></td></tr></table></div></figure>
 
+
+<h2>追記</h2>
+
+<h3>アクセスするURLを<code>/insight/</code>から<code>/</code>に変えたい。</h3>
+
+<p><code>bitcore-node.json</code>を以下のように変える。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>service <span class="o">{</span>
+</span><span class='line'>    :
+</span><span class='line'>  <span class="s2">&quot;servicesConfig&quot;</span>: <span class="o">{</span>
+</span><span class='line'>      :
+</span><span class='line'>    <span class="s2">&quot;insight-ui-koto&quot;</span>: <span class="o">{</span>
+</span><span class='line'>      <span class="s2">&quot;routePrefix&quot;</span>: <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>apiのURLを変えた場合は、apiPrefixも設定する必要があると思われる。(未確認)</p>
+
+<h3>insightが使用するkotodが使用するポートを変えたい</h3>
+
+<p>P2PポートとRPCポートだけでいいなら<code>data/koto.conf</code>に以下を追加すればよい。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="na">port</span><span class="o">=</span><span class="s">12345</span>
+</span><span class='line'><span class="na">rcpport</span><span class="o">=</span><span class="s">12346</span>
+</span></code></pre></td></tr></table></div></figure>
+
 </div>
   
   
