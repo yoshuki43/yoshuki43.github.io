@@ -9,13 +9,8 @@
   <meta name="author" content="yoshuki43">
 
   
-  <meta name="description" content="nginxでK-NOMPにアクセスできるようにする 前提
-* K-NOMPは8080ポートでインストールされている
-* http(s)://your.domain.com/ で公開する
-* Debian 8で確認しています 準備 1
-2
-sudo apt-get update
-sudo apt- &hellip;">
+  <meta name="description" content="はじめに 以前作成したKotoのTestnetにInsightとFaucetを追加してみました。 テストネットサービストップ(構築中): https://koto-testnet.poolof.work/
+Insight: https://koto-insight-testnet.poolof. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +79,91 @@ sudo apt- &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2018/04/02/koto-testnet-insight-and-faucet/">Koto TestnetのInsightとFaucet</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-04-02T17:37:33+09:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2018</span></span> <span class='time'>5:37 pm</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>はじめに</h2>
+
+<p><a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">以前</a>作成したKotoのTestnetにInsightとFaucetを追加してみました。</p>
+
+<ul>
+<li>テストネットサービストップ(構築中): <a href="https://koto-testnet.poolof.work/">https://koto-testnet.poolof.work/</a></li>
+<li>Insight: <a href="https://koto-insight-testnet.poolof.work/">https://koto-insight-testnet.poolof.work/</a></li>
+<li>Faucet(蛇口): <a href="https://koto-testnet.poolof.work/faucet/">https://koto-testnet.poolof.work/faucet/</a></li>
+</ul>
+
+
+<p>Faucetは100Kotoまで取り出せます。1日10回の制限があります。</p>
+
+<h2>Testnetの使い方</h2>
+
+<p>使い方(再録)：</p>
+
+<p>(1) <code>-testnet</code>オプションをつけてkotodを起動する。</p>
+
+<blockquote><p>kotod -testnet &hellip;</p></blockquote>
+
+<p>Testnetのブロックやログは<code>~/.koto/testnet3/</code>以下に保存されます。</p>
+
+<p>(2) <code>koto-testnet.poolof.work</code>をaddnodeする。</p>
+
+<blockquote><p>koto-cli &ndash;testnet addnode koto-testnet.poolof.work add</p></blockquote>
+
+<p>公式のTestnetが動いたことを考えて、<a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">以前のTestnetの記事</a>を参考に、dnsseedの変更をしたほうがいいかも。</p>
+
+<h2>Koto Faucet</h2>
+
+<p>Pythonで作ってみました。</p>
+
+<p>特徴
+* Flask + Flask-WTF + SQLAlchemy + uWSGI
+* CSRF Protection (Flask-WTFの機能)
+* reCAPTCHA (Flask-WTFの機能)</p>
+
+<p>ソースは以下で公開しています。</p>
+
+<ul>
+<li>Koto Faucet (Github)<br/>
+<a href="https://github.com/yoshuki43/koto-faucet">https://github.com/yoshuki43/koto-faucet</a></li>
+</ul>
+
+
+<p>見た目はもう少し何とかしたいです。</p>
+
+<p>Flask以下全部初めて使用したので、本当にこの書き方であっているかはわかりません…。
+特に、送金部分が別スレッドでWebアプリと別に動くつくりにしましたが、FlaskやuWSGI的にどうなのか？もよくわからず。</p>
+
+<p>とりあえず、思ったようには動いてはいるようです。</p>
+
+<h2>Insight</h2>
+
+<p>インストールに関しては<a href="https://yoshuki43.github.io/blog/2018/03/17/install-insight/">以前</a>の記事を参照のこと。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
