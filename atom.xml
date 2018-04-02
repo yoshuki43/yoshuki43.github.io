@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-04-02T17:59:53+09:00</updated>
+  <updated>2018-04-02T18:00:35+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -51,10 +51,14 @@
 
 <p>Pythonで作ってみました。</p>
 
-<p>特徴
-* Flask + Flask-WTF + SQLAlchemy + uWSGI
-* CSRF Protection (Flask-WTFの機能)
-* reCAPTCHA (Flask-WTFの機能)</p>
+<p>特徴:</p>
+
+<ul>
+<li>Flask + Flask-WTF + SQLAlchemy + uWSGI</li>
+<li>CSRF Protection (Flask-WTFの機能)</li>
+<li>reCAPTCHA (Flask-WTFの機能)</li>
+</ul>
+
 
 <p>ソースは以下で公開しています。</p>
 
