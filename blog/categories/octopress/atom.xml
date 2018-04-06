@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | yoshuki43's blog]]></title>
+  <link href="http://yoshuki43.github.io/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://yoshuki43.github.io/"/>
+  <updated>2018-04-06T11:55:14+09:00</updated>
+  <id>http://yoshuki43.github.io/</id>
+  <author>
+    <name><![CDATA[yoshuki43]]></name>
+    <email><![CDATA[yoshuki43@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Octopressインストール方法]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/02/09/octpass/"/>
+    <updated>2018-02-09T14:13:16+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/02/09/octpass</id>
+    <content type="html"><![CDATA[<h2>Octopressとは</h2>
+
+<p>OctopressはJekyllを使ったブログ構築用フレームワーク。
+GitHub Pagesと連携できる。</p>
+
+<p>Octopress<br/>
+<a href="http://octopress.org/">http://octopress.org/</a></p>
+
+<p>インストール<br/>
+<a href="http://octopress.org/docs/setup/">http://octopress.org/docs/setup/</a></p>
+
+<p>テーマ一覧<br/>
+<a href="https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes">https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes</a></p>
+
+<h2>インストール</h2>
+
+<h3>準備</h3>
+
+<!-- more -->
+
+
+<p>ruby環境の構築
+<code>
+sudo apt-get update
+sudo apt-get install -y ruby ruby-dev git
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+cd ~/.rbenv &amp;&amp; src/configure &amp;&amp; make -C src
+git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+</code>
+以下の行を「~/.bash_profile」に追記</p>
+
+<pre><code>export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+</code></pre>
+
+<p>反映</p>
+
+<pre><code>source ~/.bash_profile
+</code></pre>
+
+<p>ruby環境を作成(バージョンは<a href="https://pages.github.com/versions/">ここ</a>のrubyと同じにするとよい。)
+<code>
+ rbenv install 2.4.2
+ rbenv global 2.4.2
+ gem install bundler
+ #rakeは特定バージョンが必要なのでインストールしないこと！rake
+</code></p>
+
+<p>node.jsをインストール(ExecJSで必要になるため。)</p>
+
+<pre><code>curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+sudo apt-get install -y nodejs
+</code></pre>
+
+<h3>Octopressインストール</h3>
+
+<pre><code>git clone git://github.com/imathis/octopress.git octopress
+cd octopress
+rbenv rehash
+bundle install
+rake install
+</code></pre>
+
+<h3>テーマ変更</h3>
+
+<p>このへんからよさげなテーマを選ぶ。</p>
+
+<p><a href="https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes">https://github.com/imathis/octopress/wiki/3rd-Party-Octopress-Themes</a></p>
+
+<p>GitHubをDeploy先として登録</p>
+
+<pre><code>「ユーザ名.github.io」というリポジトリをGitHubに作っておく。
+
+$ rake setup_github_pages
+    :
+Repository url: https://github.com/&lt;username&gt;/&lt;username&gt;.github.io
+    :
+$ rake generate
+$ rake deploy
+</code></pre>
+
+<p>「<a href="">https://&lt;username&gt;.github.io/</a>」にアクセスしてみる。</p>
+
+<h3>設定</h3>
+
+<pre><code>vi _config.yml
+</code></pre>
+
+<p>ブログ以外のファイルも入れたい?<br/>
+-> sourceフォルダにGitHub Pagesにアップロードしたいファイルを入れる。</p>
+
+<h2>ブログを書く</h2>
+
+<pre><code>$ rake new_post['1st post']
+mkdir -p source/_posts
+Creating new post: source/_posts/2018-02-09-1st-post.markdown
+</code></pre>
+
+<p>ファイルが作成されるので、編集する。</p>
+
+<p>マークダウンヘルプ<br/>
+<a href="https://github.com/higuma/markdown_cheat_sheet">https://github.com/higuma/markdown_cheat_sheet</a><br/>
+<a href="https://help.github.com/articles/basic-writing-and-formatting-syntax">https://help.github.com/articles/basic-writing-and-formatting-syntax</a></p>
+
+<p>VSCodeを使用していれば、マークダウンを開いた画面の右上にある「プレビューを横に表示」ボタンでプレビュー画面を表示できる。（Ctrk+K vでもOK?)</p>
+
+<p>追記:<br/>
+VSCodeの拡張機能「Markdown Preview Github Styling」をインストールすれば、よりGitHubに近い形でプレビューを表示できる。</p>
+
+<p>書き終わったら先ほどと同じようにgenerate->deployする。
+<code>
+rake generate
+rake deploy
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

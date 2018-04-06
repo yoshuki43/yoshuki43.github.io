@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Insight | yoshuki43's blog]]></title>
+  <link href="http://yoshuki43.github.io/blog/categories/insight/atom.xml" rel="self"/>
+  <link href="http://yoshuki43.github.io/"/>
+  <updated>2018-04-06T11:55:14+09:00</updated>
+  <id>http://yoshuki43.github.io/</id>
+  <author>
+    <name><![CDATA[yoshuki43]]></name>
+    <email><![CDATA[yoshuki43@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Koto TestnetのInsightとFaucet]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/04/02/koto-testnet-insight-and-faucet/"/>
+    <updated>2018-04-02T17:37:33+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/04/02/koto-testnet-insight-and-faucet</id>
+    <content type="html"><![CDATA[<h2>はじめに</h2>
+
+<p><a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">以前</a>作成したKotoのTestnetにInsightとFaucetを追加してみました。</p>
+
+<ul>
+<li>テストネットサービストップ(構築中): <a href="https://koto-testnet.poolof.work/">https://koto-testnet.poolof.work/</a></li>
+<li>Insight: <a href="https://koto-insight-testnet.poolof.work/">https://koto-insight-testnet.poolof.work/</a></li>
+<li>Faucet(蛇口): <a href="https://koto-testnet.poolof.work/faucet/">https://koto-testnet.poolof.work/faucet/</a></li>
+</ul>
+
+
+<p>Faucetは100Kotoまで取り出せます。1日10回の制限があります。</p>
+
+<h2>Testnetの使い方</h2>
+
+<p>使い方(再録)：</p>
+
+<p>(1) <code>-testnet</code>オプションをつけてkotodを起動する。</p>
+
+<blockquote><p>kotod -testnet &hellip;</p></blockquote>
+
+<p>Testnetのブロックやログは<code>~/.koto/testnet3/</code>以下に保存されます。</p>
+
+<p>(2)<code>koto-testnet.poolof.work</code>をaddnodeする。</p>
+
+<blockquote><p>koto-cli &ndash;testnet addnode koto-testnet.poolof.work add</p></blockquote>
+
+<p>公式のTestnetが動いたことを考えて、<a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">以前のTestnetの記事</a>を参考に、dnsseedの変更をしたほうがいいかも。</p>
+
+<!-- more -->
+
+
+<h2>Koto Faucet</h2>
+
+<p>Pythonで作ってみました。</p>
+
+<p>特徴:</p>
+
+<ul>
+<li>Flask + Flask-WTF + SQLAlchemy + uWSGI</li>
+<li>CSRF Protection (Flask-WTFの機能)</li>
+<li>reCAPTCHA (Flask-WTFの機能)</li>
+</ul>
+
+
+<p>ソースは以下で公開しています。</p>
+
+<ul>
+<li>Koto Faucet (Github)<br/>
+<a href="https://github.com/yoshuki43/koto-faucet">https://github.com/yoshuki43/koto-faucet</a></li>
+</ul>
+
+
+<p>見た目はもう少し何とかしたいです。</p>
+
+<p>Flask以下全部初めて使用したので、本当にこの書き方であっているかはわかりません…。
+特に、送金部分が別スレッドでWebアプリと別に動くつくりにしましたが、FlaskやuWSGI的にどうなのか？もよくわからず。</p>
+
+<p>とりあえず、思ったようには動いてはいるようです。</p>
+
+<h2>Insight</h2>
+
+<p>インストールに関しては<a href="https://yoshuki43.github.io/blog/2018/03/17/install-insight/">以前</a>の記事を参照のこと。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testnet用にKotoのInsightをインストールする]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/03/17/install-insight/"/>
+    <updated>2018-03-17T13:59:43+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/03/17/install-insight</id>
+    <content type="html"><![CDATA[<h2>準備</h2>
+
+<pre><code>#kotod/bitcore-nodeコンパイルに必要なもの
+sudo apt-get update
+sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib \
+    autoconf libtool ncurses-dev unzip git python python-zmq zlib1g-dev \
+    wget bsdmainutils automake curl libzmq3-dev
+
+#Node.js一式
+curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+#ソースダウンロード
+git clone https://github.com/wo01/koto
+git clone https://github.com/wo01/bitcore-node-koto
+git clone https://github.com/wo01/insight-api-koto
+git clone https://github.com/wo01/insight-ui-koto
+</code></pre>
+
+<h2>インストール</h2>
+
+<h3>Insight用のKotodをコンパイル</h3>
+
+<p>insightではgetblockhashes等、通常のKotodでサポートしていない(削除された？)RPCコマンドを使用するため、特別なバージョンのKotodが必要です。</p>
+
+<!-- more -->
+
+
+<p>上記リポジトリのブランチにinsight用のKotodが入っています。</p>
+
+<p>非公式Testnetを使う場合は、ここでdnsseedの設定を変更しておきましょう。
+<code>
+vi koto/src/chainparam.cpp
+ ...
+</code>
+※詳細は<a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">前回の記事</a>を参照のこと。</p>
+
+<p>コンパイル手順：
+<code>
+cd koto
+git checkout v1.0.14-bitcore
+./zcutil/build.sh --disable-rust
+cp src/kotod ../bitcore-node-koto/bin/
+</code></p>
+
+<p>※「~/.zcash-params」の準備も忘れずに。</p>
+
+<h3>bitcore-node-kotoの準備</h3>
+
+<pre><code>cd ../bitcore-node-koto
+npm install
+</code></pre>
+
+<h3>ノード作成とUIプラグインのインストール</h3>
+
+<pre><code>cd ..
+./bitcore-node-koto/bin/bitcore-node create testnet
+cd testnet
+../bitcore-node-koto/bin/bitcore-node install ../insight-api-koto
+../bitcore-node-koto/bin/bitcore-node install ../insight-ui-koto
+</code></pre>
+
+<h3>設定</h3>
+
+<p>networkをtestnetにします。</p>
+
+<pre><code class="json">{
+  "network": "testnet",
+  "port": 3001,
+  "services": [
+    "bitcoind",
+    "insight-api-koto",
+    "insight-ui-koto",
+    "web"
+  ],
+  "servicesConfig": {
+    "bitcoind": {
+      "spawn": {
+        "datadir": "./data",
+        "exec": "/home/koto/bitcore-node-koto/bin/kotod"
+      }
+    }
+  }
+}
+</code></pre>
+
+<h3>とりあえず実行してみる</h3>
+
+<pre><code>../bitcore-node-koto/bin/bitcore-node start
+</code></pre>
+
+<p>以下のことを確認する。</p>
+
+<ul>
+<li>Blocksが増えていく</li>
+<li><a href="http://localhost:3001/">http://localhost:3001/</a> にアクセスできる</li>
+</ul>
+
+
+<p>Ctrl-Cで終了</p>
+
+<h3>kotod設定</h3>
+
+<p>初期設定のままだとbitcore-node(insight)のログと一緒にkotodの出力が表示さててしまい、非常にうざいので、kotodの表示を止めます。</p>
+
+<p>vi data/koto.conf</p>
+
+<pre><code>#これを最後の行に追加
+showmetrics=0
+</code></pre>
+
+<h2>systemdで起動</h2>
+
+<p>前提</p>
+
+<ul>
+<li>kotoユーザで実行</li>
+<li>ホームディレクトリ直下に、上記手順でインストールした</li>
+</ul>
+
+
+<p>/etc/systemd/system/insight.conf
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[Unit]</span>
+</span><span class='line'><span class="na">Description</span> <span class="o">=</span> <span class="s">Koto Blockchain Explorer&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="k">[Service]</span>
+</span><span class='line'><span class="na">ExecStart</span> <span class="o">=</span> <span class="s">/home/koto/bitcore-node-koto/bin/bitcore-node start</span>
+</span><span class='line'><span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/home/koto/testnet</span>
+</span><span class='line'><span class="na">Restart</span> <span class="o">=</span> <span class="s">always</span>
+</span><span class='line'><span class="na">Type</span> <span class="o">=</span> <span class="s">simple</span>
+</span><span class='line'><span class="na">User</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Group</span><span class="o">=</span><span class="s">koto&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="k">[Install]</span>
+</span><span class='line'><span class="na">WantedBy</span> <span class="o">=</span> <span class="s">multi-user.target</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>実行
+<code>
+sudo systemctl daemon-reload
+sudo systemctl enable insight
+sudo systemctl start insight
+</code></p>
+
+<p>確認
+<code>sh
+$ systemctl status insight
+● insight.service - Koto Blockchain Explorer
+   Loaded: loaded (/etc/systemd/system/insight.service; disabled)
+   Active: active (running) since Sat 2018-03-17 13:56:29 JST; 28min ago
+ Main PID: 13350 (bitcore)
+   CGroup: /system.slice/insight.service
+           ├─13350 bitcore
+           └─13361 /home/koto/bitcore-node-koto/bin/kotod --conf=/home/koto/testnet/data/koto.conf --datadir=/home/koto/...
+</code></p>
+
+<h2>追記</h2>
+
+<h3>アクセスするURLを<code>/insight/</code>から<code>/</code>に変えたい。</h3>
+
+<p><code>bitcore-node.json</code>を以下のように変える。</p>
+
+<pre><code>service {
+    :
+  "servicesConfig": {
+      :
+    "insight-ui-koto": {
+      "routePrefix": ""
+    }
+  }
+}
+</code></pre>
+
+<p>apiのURLを変えた場合は、apiPrefixも設定する必要があると思われる。(未確認)</p>
+
+<h3>insightが使用するkotodが使用するポートを変えたい</h3>
+
+<p>P2PポートとRPCポートだけでいいなら<code>data/koto.conf</code>に以下を追加すればよい。
+<code>ini
+port=12345
+rcpport=12346
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

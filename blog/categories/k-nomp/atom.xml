@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: K-nomp | yoshuki43's blog]]></title>
+  <link href="http://yoshuki43.github.io/blog/categories/k-nomp/atom.xml" rel="self"/>
+  <link href="http://yoshuki43.github.io/"/>
+  <updated>2018-04-06T11:55:14+09:00</updated>
+  <id>http://yoshuki43.github.io/</id>
+  <author>
+    <name><![CDATA[yoshuki43]]></name>
+    <email><![CDATA[yoshuki43@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[K-NOMPをnginxを使ってHTTPSで公開する]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/04/02/k-nomp-nginx-https/"/>
+    <updated>2018-04-02T16:41:28+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/04/02/k-nomp-nginx-https</id>
+    <content type="html"><![CDATA[<h2>nginxでK-NOMPにアクセスできるようにする</h2>
+
+<p>前提</p>
+
+<ul>
+<li>K-NOMPは8080ポートでインストールされている</li>
+<li>http(s)://your.domain.com/ で公開する</li>
+<li>Debian 8で確認しています</li>
+</ul>
+
+
+<h3>準備</h3>
+
+<pre><code>sudo apt-get update
+sudo apt-get install -y nginx git
+</code></pre>
+
+<h3>とりあえずHTTP用の設定を用意します</h3>
+
+<!-- more -->
+
+
+<p>sudo vi /etc/nginx/sites-available/your.domain.com.conf
+<code>
+server {
+    listen 80;
+    server_name your.domain.com;
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_redirect off;
+    }
+}
+</code></p>
+
+<p>site-enableにリンク
+<code>
+sudo ln -s /etc/nginx/sites-available/your.domain.com.conf /etc/nginx/sites-enabled/
+</code></p>
+
+<p>nginxを再起動
+<code>
+sudo systemctl restart nginx
+</code></p>
+
+<h3>確認</h3>
+
+<p><code>http://your.domain.com/</code> にアクセスして、K-NOMPの画面が表示されることを確認します。</p>
+
+<h2>HTTPS化する</h2>
+
+<h3>証明書の取得</h3>
+
+<p>Let&rsquo;s Encrypt(certbot)に任せます。
+「&ndash;nginx」を指定すると、certbotが自動でnginxの設定を書き換えてくれます。
+<code>
+sudo su -
+cd
+git clone https://github.com/certbot/certbot
+cd certbot
+./certbot-auto --nginx -d your.domain.com -m yourname@example.com --agree-tos
+  =&gt; 途中で2回入力を求められるので、それぞれ「y」、「2」を入力する。
+</code>
+※ 2を選ぶとHTTPポートからHTTPSポートに転送する設定が入ります。</p>
+
+<h3>確認</h3>
+
+<p><code>https://your.domain.com/</code> にアクセスして、HTTPSが有効なこと、証明書が有効なことを確認します。</p>
+
+<h3>証明書の自動更新設定</h3>
+
+<p>Let&rsquo;s Encryptの証明書は3か月で期限切れになるので、その前に更新しなければなりません。</p>
+
+<p>2か月おきくらいに手動でやってもいいですが、面倒がないように自動化します。</p>
+
+<p>crntab -e (rootで実行)
+<code>
+10 20 * * 1 /root/certbot/certbot-auto renew --non-interactive &gt;&gt; /root/certbot.log 2&gt;&amp;1
+</code>
+毎週月曜日20時10分にチェックし、期限30日前になったら更新してくれます。
+複数の証明書をとっていても、これだけでOK(のはず)です。</p>
+
+<h2>他にやっておくこと</h2>
+
+<h3>デフォルトのnginxの設定</h3>
+
+<p>HTTPポートにIPアドレスでアクセスすると、nginxのデフォルト設定が使用されます。
+気になるなら変更しましょう。<br/>
+(<code>/var/www/html/index.html</code>を空にする等？)</p>
+
+<h3>Qualys SSL ReportでA+評価をとりたい</h3>
+
+<ul>
+<li>Qualys SSL Report<br/>
+<a href="https://www.ssllabs.com/ssltest/index.html">https://www.ssllabs.com/ssltest/index.html</a></li>
+</ul>
+
+
+<p><code>/etc/nginx/nginx.conf</code>を編集
+<code>
+ssl_prefer_server_ciphers on;
+ssl_ciphers "ECDHE+RSAGCM:ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:!aNULL:!eNull:!EXPORT:!DES:!3DES:!MD5:!DSS";
+</code>
+自分の環境では、以上でA+になりました。</p>
+
+<p>以下をやるとさらに高評化になりますが、8080ポートにアクセスできなくなる(HTTPSを強制されるため)ので注意しましょう。
+<code>
+location / {
+    :
+   add_header Strict-Transport-Security max-age=15768000;
+}
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

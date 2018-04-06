@@ -4,7 +4,7 @@
   <title><![CDATA[yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-04-02T18:20:31+09:00</updated>
+  <updated>2018-04-06T11:55:14+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -41,11 +41,14 @@
 
 <p>Testnetのブロックやログは<code>~/.koto/testnet3/</code>以下に保存されます。</p>
 
-<p>(2) <code>koto-testnet.poolof.work</code>をaddnodeする。</p>
+<p>(2)<code>koto-testnet.poolof.work</code>をaddnodeする。</p>
 
 <blockquote><p>koto-cli &ndash;testnet addnode koto-testnet.poolof.work add</p></blockquote>
 
 <p>公式のTestnetが動いたことを考えて、<a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">以前のTestnetの記事</a>を参考に、dnsseedの変更をしたほうがいいかも。</p>
+
+<!-- more -->
+
 
 <h2>Koto Faucet</h2>
 
@@ -106,6 +109,9 @@
 
 
 <h3>とりあえずHTTP用の設定を用意します</h3>
+
+<!-- more -->
+
 
 <p>sudo vi /etc/nginx/sites-available/your.domain.com.conf</p>
 
@@ -269,6 +275,9 @@
 <h3>Insight用のKotodをコンパイル</h3>
 
 <p>insightではgetblockhashes等、通常のKotodでサポートしていない(削除された？)RPCコマンドを使用するため、特別なバージョンのKotodが必要です。</p>
+
+<!-- more -->
+
 
 <p>上記リポジトリのブランチにinsight用のKotodが入っています。</p>
 
@@ -527,6 +536,9 @@ KotoのソースにはTestnet用のdnsseedとして「dnsseed.testnet.koto.cash�
 
 
 <p><strong>(自分で建てるのがめんどくさい人向け)</strong></p>
+
+<!-- more -->
+
 
 <p>下記手順を行ったtestnetを<code>koto-testnet.poolof.work</code>で公開しています。
 上記ホストをaddnodeすれば接続できるので、自由に使ってください。<br/>
@@ -819,6 +831,9 @@ GitHub Pagesと連携できる。</p>
 <h2>インストール</h2>
 
 <h3>準備</h3>
+
+<!-- more -->
+
 
 <p>ruby環境の構築</p>
 

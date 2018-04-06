@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Koto | yoshuki43's blog]]></title>
+  <link href="http://yoshuki43.github.io/blog/categories/koto/atom.xml" rel="self"/>
+  <link href="http://yoshuki43.github.io/"/>
+  <updated>2018-04-06T11:55:14+09:00</updated>
+  <id>http://yoshuki43.github.io/</id>
+  <author>
+    <name><![CDATA[yoshuki43]]></name>
+    <email><![CDATA[yoshuki43@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Koto TestnetのInsightとFaucet]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/04/02/koto-testnet-insight-and-faucet/"/>
+    <updated>2018-04-02T17:37:33+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/04/02/koto-testnet-insight-and-faucet</id>
+    <content type="html"><![CDATA[<h2>はじめに</h2>
+
+<p><a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">以前</a>作成したKotoのTestnetにInsightとFaucetを追加してみました。</p>
+
+<ul>
+<li>テストネットサービストップ(構築中): <a href="https://koto-testnet.poolof.work/">https://koto-testnet.poolof.work/</a></li>
+<li>Insight: <a href="https://koto-insight-testnet.poolof.work/">https://koto-insight-testnet.poolof.work/</a></li>
+<li>Faucet(蛇口): <a href="https://koto-testnet.poolof.work/faucet/">https://koto-testnet.poolof.work/faucet/</a></li>
+</ul>
+
+
+<p>Faucetは100Kotoまで取り出せます。1日10回の制限があります。</p>
+
+<h2>Testnetの使い方</h2>
+
+<p>使い方(再録)：</p>
+
+<p>(1) <code>-testnet</code>オプションをつけてkotodを起動する。</p>
+
+<blockquote><p>kotod -testnet &hellip;</p></blockquote>
+
+<p>Testnetのブロックやログは<code>~/.koto/testnet3/</code>以下に保存されます。</p>
+
+<p>(2)<code>koto-testnet.poolof.work</code>をaddnodeする。</p>
+
+<blockquote><p>koto-cli &ndash;testnet addnode koto-testnet.poolof.work add</p></blockquote>
+
+<p>公式のTestnetが動いたことを考えて、<a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">以前のTestnetの記事</a>を参考に、dnsseedの変更をしたほうがいいかも。</p>
+
+<!-- more -->
+
+
+<h2>Koto Faucet</h2>
+
+<p>Pythonで作ってみました。</p>
+
+<p>特徴:</p>
+
+<ul>
+<li>Flask + Flask-WTF + SQLAlchemy + uWSGI</li>
+<li>CSRF Protection (Flask-WTFの機能)</li>
+<li>reCAPTCHA (Flask-WTFの機能)</li>
+</ul>
+
+
+<p>ソースは以下で公開しています。</p>
+
+<ul>
+<li>Koto Faucet (Github)<br/>
+<a href="https://github.com/yoshuki43/koto-faucet">https://github.com/yoshuki43/koto-faucet</a></li>
+</ul>
+
+
+<p>見た目はもう少し何とかしたいです。</p>
+
+<p>Flask以下全部初めて使用したので、本当にこの書き方であっているかはわかりません…。
+特に、送金部分が別スレッドでWebアプリと別に動くつくりにしましたが、FlaskやuWSGI的にどうなのか？もよくわからず。</p>
+
+<p>とりあえず、思ったようには動いてはいるようです。</p>
+
+<h2>Insight</h2>
+
+<p>インストールに関しては<a href="https://yoshuki43.github.io/blog/2018/03/17/install-insight/">以前</a>の記事を参照のこと。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[K-NOMPをnginxを使ってHTTPSで公開する]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/04/02/k-nomp-nginx-https/"/>
+    <updated>2018-04-02T16:41:28+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/04/02/k-nomp-nginx-https</id>
+    <content type="html"><![CDATA[<h2>nginxでK-NOMPにアクセスできるようにする</h2>
+
+<p>前提</p>
+
+<ul>
+<li>K-NOMPは8080ポートでインストールされている</li>
+<li>http(s)://your.domain.com/ で公開する</li>
+<li>Debian 8で確認しています</li>
+</ul>
+
+
+<h3>準備</h3>
+
+<pre><code>sudo apt-get update
+sudo apt-get install -y nginx git
+</code></pre>
+
+<h3>とりあえずHTTP用の設定を用意します</h3>
+
+<!-- more -->
+
+
+<p>sudo vi /etc/nginx/sites-available/your.domain.com.conf
+<code>
+server {
+    listen 80;
+    server_name your.domain.com;
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_redirect off;
+    }
+}
+</code></p>
+
+<p>site-enableにリンク
+<code>
+sudo ln -s /etc/nginx/sites-available/your.domain.com.conf /etc/nginx/sites-enabled/
+</code></p>
+
+<p>nginxを再起動
+<code>
+sudo systemctl restart nginx
+</code></p>
+
+<h3>確認</h3>
+
+<p><code>http://your.domain.com/</code> にアクセスして、K-NOMPの画面が表示されることを確認します。</p>
+
+<h2>HTTPS化する</h2>
+
+<h3>証明書の取得</h3>
+
+<p>Let&rsquo;s Encrypt(certbot)に任せます。
+「&ndash;nginx」を指定すると、certbotが自動でnginxの設定を書き換えてくれます。
+<code>
+sudo su -
+cd
+git clone https://github.com/certbot/certbot
+cd certbot
+./certbot-auto --nginx -d your.domain.com -m yourname@example.com --agree-tos
+  =&gt; 途中で2回入力を求められるので、それぞれ「y」、「2」を入力する。
+</code>
+※ 2を選ぶとHTTPポートからHTTPSポートに転送する設定が入ります。</p>
+
+<h3>確認</h3>
+
+<p><code>https://your.domain.com/</code> にアクセスして、HTTPSが有効なこと、証明書が有効なことを確認します。</p>
+
+<h3>証明書の自動更新設定</h3>
+
+<p>Let&rsquo;s Encryptの証明書は3か月で期限切れになるので、その前に更新しなければなりません。</p>
+
+<p>2か月おきくらいに手動でやってもいいですが、面倒がないように自動化します。</p>
+
+<p>crntab -e (rootで実行)
+<code>
+10 20 * * 1 /root/certbot/certbot-auto renew --non-interactive &gt;&gt; /root/certbot.log 2&gt;&amp;1
+</code>
+毎週月曜日20時10分にチェックし、期限30日前になったら更新してくれます。
+複数の証明書をとっていても、これだけでOK(のはず)です。</p>
+
+<h2>他にやっておくこと</h2>
+
+<h3>デフォルトのnginxの設定</h3>
+
+<p>HTTPポートにIPアドレスでアクセスすると、nginxのデフォルト設定が使用されます。
+気になるなら変更しましょう。<br/>
+(<code>/var/www/html/index.html</code>を空にする等？)</p>
+
+<h3>Qualys SSL ReportでA+評価をとりたい</h3>
+
+<ul>
+<li>Qualys SSL Report<br/>
+<a href="https://www.ssllabs.com/ssltest/index.html">https://www.ssllabs.com/ssltest/index.html</a></li>
+</ul>
+
+
+<p><code>/etc/nginx/nginx.conf</code>を編集
+<code>
+ssl_prefer_server_ciphers on;
+ssl_ciphers "ECDHE+RSAGCM:ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:!aNULL:!eNull:!EXPORT:!DES:!3DES:!MD5:!DSS";
+</code>
+自分の環境では、以上でA+になりました。</p>
+
+<p>以下をやるとさらに高評化になりますが、8080ポートにアクセスできなくなる(HTTPSを強制されるため)ので注意しましょう。
+<code>
+location / {
+    :
+   add_header Strict-Transport-Security max-age=15768000;
+}
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testnet用にKotoのInsightをインストールする]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/03/17/install-insight/"/>
+    <updated>2018-03-17T13:59:43+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/03/17/install-insight</id>
+    <content type="html"><![CDATA[<h2>準備</h2>
+
+<pre><code>#kotod/bitcore-nodeコンパイルに必要なもの
+sudo apt-get update
+sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib \
+    autoconf libtool ncurses-dev unzip git python python-zmq zlib1g-dev \
+    wget bsdmainutils automake curl libzmq3-dev
+
+#Node.js一式
+curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+#ソースダウンロード
+git clone https://github.com/wo01/koto
+git clone https://github.com/wo01/bitcore-node-koto
+git clone https://github.com/wo01/insight-api-koto
+git clone https://github.com/wo01/insight-ui-koto
+</code></pre>
+
+<h2>インストール</h2>
+
+<h3>Insight用のKotodをコンパイル</h3>
+
+<p>insightではgetblockhashes等、通常のKotodでサポートしていない(削除された？)RPCコマンドを使用するため、特別なバージョンのKotodが必要です。</p>
+
+<!-- more -->
+
+
+<p>上記リポジトリのブランチにinsight用のKotodが入っています。</p>
+
+<p>非公式Testnetを使う場合は、ここでdnsseedの設定を変更しておきましょう。
+<code>
+vi koto/src/chainparam.cpp
+ ...
+</code>
+※詳細は<a href="https://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/">前回の記事</a>を参照のこと。</p>
+
+<p>コンパイル手順：
+<code>
+cd koto
+git checkout v1.0.14-bitcore
+./zcutil/build.sh --disable-rust
+cp src/kotod ../bitcore-node-koto/bin/
+</code></p>
+
+<p>※「~/.zcash-params」の準備も忘れずに。</p>
+
+<h3>bitcore-node-kotoの準備</h3>
+
+<pre><code>cd ../bitcore-node-koto
+npm install
+</code></pre>
+
+<h3>ノード作成とUIプラグインのインストール</h3>
+
+<pre><code>cd ..
+./bitcore-node-koto/bin/bitcore-node create testnet
+cd testnet
+../bitcore-node-koto/bin/bitcore-node install ../insight-api-koto
+../bitcore-node-koto/bin/bitcore-node install ../insight-ui-koto
+</code></pre>
+
+<h3>設定</h3>
+
+<p>networkをtestnetにします。</p>
+
+<pre><code class="json">{
+  "network": "testnet",
+  "port": 3001,
+  "services": [
+    "bitcoind",
+    "insight-api-koto",
+    "insight-ui-koto",
+    "web"
+  ],
+  "servicesConfig": {
+    "bitcoind": {
+      "spawn": {
+        "datadir": "./data",
+        "exec": "/home/koto/bitcore-node-koto/bin/kotod"
+      }
+    }
+  }
+}
+</code></pre>
+
+<h3>とりあえず実行してみる</h3>
+
+<pre><code>../bitcore-node-koto/bin/bitcore-node start
+</code></pre>
+
+<p>以下のことを確認する。</p>
+
+<ul>
+<li>Blocksが増えていく</li>
+<li><a href="http://localhost:3001/">http://localhost:3001/</a> にアクセスできる</li>
+</ul>
+
+
+<p>Ctrl-Cで終了</p>
+
+<h3>kotod設定</h3>
+
+<p>初期設定のままだとbitcore-node(insight)のログと一緒にkotodの出力が表示さててしまい、非常にうざいので、kotodの表示を止めます。</p>
+
+<p>vi data/koto.conf</p>
+
+<pre><code>#これを最後の行に追加
+showmetrics=0
+</code></pre>
+
+<h2>systemdで起動</h2>
+
+<p>前提</p>
+
+<ul>
+<li>kotoユーザで実行</li>
+<li>ホームディレクトリ直下に、上記手順でインストールした</li>
+</ul>
+
+
+<p>/etc/systemd/system/insight.conf
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[Unit]</span>
+</span><span class='line'><span class="na">Description</span> <span class="o">=</span> <span class="s">Koto Blockchain Explorer&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="k">[Service]</span>
+</span><span class='line'><span class="na">ExecStart</span> <span class="o">=</span> <span class="s">/home/koto/bitcore-node-koto/bin/bitcore-node start</span>
+</span><span class='line'><span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/home/koto/testnet</span>
+</span><span class='line'><span class="na">Restart</span> <span class="o">=</span> <span class="s">always</span>
+</span><span class='line'><span class="na">Type</span> <span class="o">=</span> <span class="s">simple</span>
+</span><span class='line'><span class="na">User</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Group</span><span class="o">=</span><span class="s">koto&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="k">[Install]</span>
+</span><span class='line'><span class="na">WantedBy</span> <span class="o">=</span> <span class="s">multi-user.target</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>実行
+<code>
+sudo systemctl daemon-reload
+sudo systemctl enable insight
+sudo systemctl start insight
+</code></p>
+
+<p>確認
+<code>sh
+$ systemctl status insight
+● insight.service - Koto Blockchain Explorer
+   Loaded: loaded (/etc/systemd/system/insight.service; disabled)
+   Active: active (running) since Sat 2018-03-17 13:56:29 JST; 28min ago
+ Main PID: 13350 (bitcore)
+   CGroup: /system.slice/insight.service
+           ├─13350 bitcore
+           └─13361 /home/koto/bitcore-node-koto/bin/kotod --conf=/home/koto/testnet/data/koto.conf --datadir=/home/koto/...
+</code></p>
+
+<h2>追記</h2>
+
+<h3>アクセスするURLを<code>/insight/</code>から<code>/</code>に変えたい。</h3>
+
+<p><code>bitcore-node.json</code>を以下のように変える。</p>
+
+<pre><code>service {
+    :
+  "servicesConfig": {
+      :
+    "insight-ui-koto": {
+      "routePrefix": ""
+    }
+  }
+}
+</code></pre>
+
+<p>apiのURLを変えた場合は、apiPrefixも設定する必要があると思われる。(未確認)</p>
+
+<h3>insightが使用するkotodが使用するポートを変えたい</h3>
+
+<p>P2PポートとRPCポートだけでいいなら<code>data/koto.conf</code>に以下を追加すればよい。
+<code>ini
+port=12345
+rcpport=12346
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ローカルにKotoのTestnetを作成してみる]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally/"/>
+    <updated>2018-03-17T11:08:30+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/03/17/create-koto-testnet-locally</id>
+    <content type="html"><![CDATA[<h2>はじめに</h2>
+
+<p>2018年3月現在、KotoにはTestnetが存在しません。
+KotoのソースにはTestnet用のdnsseedとして「dnsseed.testnet.koto.cash」が設定されていますが、DNS問い合わせしても値が返ってきません。</p>
+
+<p>ということで、プライベートなTestnetを立てる方法を探ってみました。</p>
+
+<p>ポイントは二つ：</p>
+
+<ul>
+<li>Genesis Block(最初のブロック)に定義されている日時からある程度時間が経つとマイニングできなく(ブロックダウンロード待ちに)なってしまうので、それをどうにかする。</li>
+<li>最低2個のkotodがネットワークに参加していないとマイニングできない。</li>
+</ul>
+
+
+<p><strong>(自分で建てるのがめんどくさい人向け)</strong></p>
+
+<!-- more -->
+
+
+<p>下記手順を行ったtestnetを<code>koto-testnet.poolof.work</code>で公開しています。
+上記ホストをaddnodeすれば接続できるので、自由に使ってください。<br/>
+※ただし予告なくサービス停止するかもしれません。</p>
+
+<p>使い方：</p>
+
+<p>(1) <code>-testnet</code>オプションをつけてkotodを起動する。</p>
+
+<blockquote><p>kotod -testnet &hellip;</p></blockquote>
+
+<p>(2) <code>koto-testnet.poolof.work</code>をaddnodeする。</p>
+
+<blockquote><p>koto-cli &ndash;testnet addnode koto-testnet.poolof.work add</p></blockquote>
+
+<h2>Kotodを改造する</h2>
+
+<h3>日時対策</h3>
+
+<p>単純にOSの時間を2017/12/10 13:10:55(Genesis Blockのタイムスタンプ)付近に変えてもいいが、ここでは日時(等)のチェックをしているところをつぶしてしまうことで実現します。</p>
+
+<p>チェック関数は<code>main.cpp</code>の<code>IsInitialBlockDownload()</code>なので、その先頭に<code>return false;</code>を入れてあげます。</p>
+
+<p>main.cpp:
+<code>c++
+bool IsInitialBlockDownload()
+{
+    return false;                               // &lt;=この行を挿入
+    const CChainParams&amp; chainParams = Params();
+    LOCK(cs_main);
+    if (fImporting || fReindex)
+        return true;
+</code></p>
+
+<h3>dnsseed設定を変更</h3>
+
+<p>公式にTestnetが動き出したときにプライベートTestnetが影響を与えてしまわないように、公式のdnsseed設定を消しておきます。
+ついでに自サーバのホスト名(または、IPアドレス)をdnsseedとして設定しておきます。</p>
+
+<p>chainparam.cpp:
+<code>c++
+/**
+ * Testnet (v3)
+ */
+class CTestNetParams : public CMainParams {
+public:
+    CTestNetParams() {
+            :
+        vFixedSeeds.clear();
+        vSeeds.clear();
+        //vSeeds.push_back(CDNSSeedData("koto.cash", "dnsseed.testnet.koto.cash"));                // &lt;= 消す
+        vSeeds.push_back(CDNSSeedData("koto-testnet.poolof.work", "koto-testnet.poolof.work"));    // &lt;= 追加
+</code></p>
+
+<h3>コンパイル</h3>
+
+<p>既にビルド済みの場合は、srcディレクトリでmake kotodを実行します。</p>
+
+<blockquote><p>cd koto<br/>
+cd src<br/>
+make kotod</p></blockquote>
+
+<p>まだビルドしていない場合は、普通にビルドします。</p>
+
+<blockquote><p>./zcutil/build.sh &ndash;disable-rust</p></blockquote>
+
+<p>ビルドし終わったら/usr/local/binへコピーします。(自分の環境では。)</p>
+
+<blockquote><p>sudo cp kotod /usr/local/bin</p></blockquote>
+
+<h2>Kotodをポートを変えて2個実行する</h2>
+
+<h3>設定</h3>
+
+<p>1個目はデフォルトのテストネット設定を使用。</p>
+
+<ul>
+<li>~/.koto</li>
+<li>ポートは18433(p2p)と18432(rpc)</li>
+</ul>
+
+
+<p>2個目のKotod：</p>
+
+<ul>
+<li>~/.kotosを使う</li>
+<li>ポートは18443(p2p)と18442(rpc)</li>
+<li>2個目のKotodが1個目に接続する。</li>
+</ul>
+
+
+<p>設定ファイルは以下のようにしています。</p>
+
+<p>1個目：~/.koto/koto.conf
+<code>ini
+rpcuser=rpcuser
+rpcpassword=rpcpass
+rpcbind=0.0.0.0
+rpcallowip=0.0.0.0/0
+server=1
+minetolocalwallet=1
+testnet=1
+</code></p>
+
+<p>2個目：~/.kotos/koto.conf
+<code>ini
+rpcuser=rpcuser
+rpcpassword=rpcpass
+rpcbind=0.0.0.0
+rpcallowip=0.0.0.0/0
+port=18443
+rpcport=18442
+connect=localhost
+server=1
+minetolocalwallet=1
+datadir=/home/koto/.kotos
+</code>
+port, rpcport, connect, datadirをそれぞれ設定しています。</p>
+
+<h3>systemd設定</h3>
+
+<p>ユーザ「koto」で実行する前提です。上記の設定ファイルもその前提で作成しています。</p>
+
+<p>/etc/systemd/system/kotod-testnet.service:
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[Unit]</span>
+</span><span class='line'><span class="na">Description</span><span class="o">=</span><span class="s">Bitcoin daemon</span>
+</span><span class='line'><span class="na">After</span><span class="o">=</span><span class="s">network.target&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="k">[Service]</span>
+</span><span class='line'><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/bin/kotod -testnet -daemon -conf=/home/koto/.koto/koto.conf -pid=/home/koto/.koto/koto-testnet.pid</span>
+</span><span class='line'><span class="na">User</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Group</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Type</span><span class="o">=</span><span class="s">forking</span>
+</span><span class='line'><span class="na">PIDFile</span><span class="o">=</span><span class="s">/home/koto/.koto/koto-testnet.pid</span>
+</span><span class='line'><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+</span><span class='line'><span class="na">PrivateTmp</span><span class="o">=</span><span class="s">true&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="k">[Install]</span>
+</span><span class='line'><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>/etc/systemd/system/kotod-testnet-slave.service:
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[Unit]</span>
+</span><span class='line'><span class="na">Description</span><span class="o">=</span><span class="s">Koto cash daemon (testnet/slave)</span>
+</span><span class='line'><span class="na">After</span><span class="o">=</span><span class="s">network.target&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="k">[Service]</span>
+</span><span class='line'><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/bin/kotod -testnet -daemon -conf=/home/koto/.kotos/koto.conf -pid=/home/koto/.kotos/koto-testnet.pid</span>
+</span><span class='line'><span class="na">User</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Group</span><span class="o">=</span><span class="s">koto</span>
+</span><span class='line'><span class="na">Type</span><span class="o">=</span><span class="s">forking</span>
+</span><span class='line'><span class="na">PIDFile</span><span class="o">=</span><span class="s">/home/koto/.kotos/koto-testnet.pid</span>
+</span><span class='line'><span class="na">Restart</span><span class="o">=</span><span class="s">on-failure</span>
+</span><span class='line'><span class="na">PrivateTmp</span><span class="o">=</span><span class="s">true&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">&lt;p&gt;</span><span class="k">[Install]</span>
+</span><span class='line'><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>実行</h3>
+
+<p>実行します。</p>
+
+<blockquote><p>sudo systemctl daemon-reload<br/>
+sudo systemctl start kotod-testnet<br/>
+sudo systemctl start kotod-testnet-slave</p></blockquote>
+
+<p><code>koto-cli --testnet getinfo</code>を実行してconnectionsが1になっていれば成功しているはずです。</p>
+
+<h2>マイニングしてみる</h2>
+
+<p>cpuminer-yescryptをコンパイルしましょう。</p>
+
+<blockquote><p> minerd &ndash;algo=yescrypt &ndash;userpass=rpcuser:rpcpass -o 127.0.0.1:18432</p></blockquote>
+
+<p>これで猛烈な勢いでマイニングが進むはず。</p>
+
+<h2>その後の作業</h2>
+
+<h3>日時対策を元に戻す</h3>
+
+<p>1度マイニングしてしまえば日時対策は不要です。</p>
+
+<p><code>main.cpp</code>の修正の影響がどこまであるかわからないので、<code>main.cpp</code>を元に戻したkotodを再コンパイルし、サービスを再起動します。</p>
+
+<h3>ToDo</h3>
+
+<ul>
+<li>testnet用のinsightを立てる</li>
+<li>testnet用の蛇口(Fauset)を作る</li>
+<li>dnsseed(DNSサーバ)を立てる</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Kotoイメージで遊んでみた]]></title>
+    <link href="http://yoshuki43.github.io/blog/2018/02/09/1st-post/"/>
+    <updated>2018-02-09T13:42:34+09:00</updated>
+    <id>http://yoshuki43.github.io/blog/2018/02/09/1st-post</id>
+    <content type="html"><![CDATA[<p>テストテストテスト。</p>
+
+<p>このブログは<a href="http://octopress.org/">Octopress</a>を使用して作成しています。</p>
+
+<p>以下はテスト記事。</p>
+
+<h2>Kotoイメージで遊んでみた</h2>
+
+<ul>
+<li><a href="https://yoshuki43.github.io/koto/koto.html">回してみた</a></li>
+<li><a href="https://yoshuki43.github.io/koto/phy.html">落としてみた</a></li>
+</ul>
+
+
+<p>Javascript+WebGLな3D Engineの「<a href="https://threejs.org/">Three.js</a>」と物理エンジン「<a href="https://github.com/lo-th/Oimo.js/">oimo.js</a>」を使用しています。</p>
+]]></content>
+  </entry>
+  
+</feed>
