@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Nginx | yoshuki43's blog]]></title>
   <link href="http://yoshuki43.github.io/blog/categories/nginx/atom.xml" rel="self"/>
   <link href="http://yoshuki43.github.io/"/>
-  <updated>2018-04-06T11:55:14+09:00</updated>
+  <updated>2018-05-22T16:50:54+09:00</updated>
   <id>http://yoshuki43.github.io/</id>
   <author>
     <name><![CDATA[yoshuki43]]></name>
@@ -94,10 +94,18 @@ cd certbot
 
 <p>crntab -e (rootで実行)
 <code>
+PATH=/usr/bin:/bin:/usr/sbin
 10 20 * * 1 /root/certbot/certbot-auto renew --non-interactive &gt;&gt; /root/certbot.log 2&gt;&amp;1
 </code>
 毎週月曜日20時10分にチェックし、期限30日前になったら更新してくれます。
 複数の証明書をとっていても、これだけでOK(のはず)です。</p>
+
+<ul>
+<li>2018/05/22追記<br/>
+  crontab設定にPATHを追加<br/>
+  cronのPATHのデフォルトは<code>/usr/bin:/bin</code>であり、/usr/sbinにあるnginxが実行できず、nginxプラグインが失敗するためPATH設定が必要となります。</li>
+</ul>
+
 
 <h2>他にやっておくこと</h2>
 

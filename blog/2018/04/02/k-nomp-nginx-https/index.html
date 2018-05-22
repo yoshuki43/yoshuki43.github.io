@@ -201,11 +201,20 @@ sudo apt-get &hellip;">
 <p>crntab -e (rootで実行)</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>10 20 * * 1 /root/certbot/certbot-auto renew --non-interactive &gt;&gt; /root/certbot.log 2&gt;&1</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PATH=/usr/bin:/bin:/usr/sbin
+</span><span class='line'>10 20 * * 1 /root/certbot/certbot-auto renew --non-interactive &gt;&gt; /root/certbot.log 2&gt;&1</span></code></pre></td></tr></table></div></figure>
 
 
 <p>毎週月曜日20時10分にチェックし、期限30日前になったら更新してくれます。
 複数の証明書をとっていても、これだけでOK(のはず)です。</p>
+
+<ul>
+<li>2018/05/22追記<br/>
+  crontab設定にPATHを追加<br/>
+  cronのPATHのデフォルトは<code>/usr/bin:/bin</code>であり、/usr/sbinにあるnginxが実行できず、nginxプラグインが失敗するためPATH設定が必要となります。</li>
+</ul>
+
 
 <h2>他にやっておくこと</h2>
 
